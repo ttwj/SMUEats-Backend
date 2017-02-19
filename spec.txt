@@ -1,0 +1,57 @@
+SMUEats Web API specification
+
+1) Authentication
+POST /token/builtin
+	Standard built-in user/password pair
+POST /token/smu
+	Somehow or other hook into SMU auth system (?????????? black magic)
+
+2) Users
+POST /user
+GET /user/<pk>
+GET /me
+
+3) Stored value 
+GET /wallet
+	See wallet balance
+POST /wallet (Staff only)
+	Add or deduct balance (at reader, etc)
+	May be wired to Transaction model
+
+4) Merchant, menu
+GET /merchant
+GET /merchant/<pk>
+
+5) Order
+POST /order
+	Create a new order
+GET /order
+	List all orders (???)
+GET /order/<pk>
+	Retrieve an order
+
+GET /order/open
+	List all open orders (to be fulfilled)
+
+GET /order/mine
+	List all orders created by this user (closed or open)
+GET /order/mine/open
+	List all orders created by this user that are open
+GET /order/mine/committed
+	List all orders created by this user that have been committed by someone else
+
+GET /order/<pk>/code
+	(Owner only) Obtain secret to exchange with fulfiller
+POST /order/<pk>/code
+	(Fulfiller only) Submit secret from fulfiller
+
+
+A note on Transactions:
+	- between wallets (when order is fulfilled)
+	- between reader and wallet (when stored value is added)
+	- between wallet and merchant (original C/D idea)
+	- between bank and wallet (FAST topup)
+	
+"FAST is not very fast" -- Terence Tan, 2017
+
+
