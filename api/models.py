@@ -79,10 +79,18 @@ class Order(models.Model):
         on_delete=models.PROTECT, related_name='fulfilled_orders',
         null=True, blank=True)
     # items =
-    # breaks DRY... but necessary for efficiency
-    total_price = models.DecimalField(**MONEY_PRECISION, default=Decimal(0), blank=True)
+    
+    # total_price = models.DecimalField(**MONEY_PRECISION, default=Decimal(0), blank=True)
+    # ^ this is a f**kwarg'in bad idea
+    
+    @property
+    def total_price(self):
+        return self.items.aggregate(
+            price_total=Sum(F('menu_item__price') * F('quantity'),
+                output_field=models.DecimalField())
+        )['price_total'] or Decimal(0)
 
-    TIMEOUT_LENGTH = {'hours': 1}
+    DEFAULT_TIMEOUT_LENGTH = {'hours': 1}
 
     # timestamps
     time_placed = models.DateTimeField(default=timezone.now)
@@ -111,16 +119,9 @@ class Order(models.Model):
             raise ValueError('if/elif fallthrough in stage property')
 
     def save(self, *args, **kwargs):
-        # You MUST call this when you are done adding references to this order
-        # fill out total_price 
-        self.total_price = self.items.aggregate(
-            price_total=Sum(F('menu_item__price') * F('quantity'),
-                output_field=models.DecimalField())
-        )['price_total'] or Decimal(0)
-        
         # default value doesn't work; don't ask
         if self.timeout_by is None:
-            self.timeout_by = self.time_placed + dt.timedelta(**self.TIMEOUT_LENGTH)
+            self.timeout_by = self.time_placed + dt.timedelta(**self.DEFAULT_TIMEOUT_LENGTH)
         
         super().save(*args, **kwargs)
 
