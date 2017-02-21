@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 
 from enum import Enum
 import datetime as dt
+from decimal import Decimal
 
 '''Issues:
 
@@ -79,7 +80,7 @@ class Order(models.Model):
         null=True, blank=True)
     # items =
     # breaks DRY... but necessary for efficiency
-    total_price = models.DecimalField(**MONEY_PRECISION, default=0, blank=True)
+    total_price = models.DecimalField(**MONEY_PRECISION, default=Decimal(0), blank=True)
 
     TIMEOUT_LENGTH = {'hours': 1}
 
@@ -110,11 +111,12 @@ class Order(models.Model):
             raise ValueError('if/elif fallthrough in stage property')
 
     def save(self, *args, **kwargs):
-        # fill out total_price (this behaves well even when there are no items!)
+        # You MUST call this when you are done adding references to this order
+        # fill out total_price 
         self.total_price = self.items.aggregate(
             price_total=Sum(F('menu_item__price') * F('quantity'),
                 output_field=models.DecimalField())
-        )['price_total']
+        )['price_total'] or Decimal(0)
         
         # default value doesn't work; don't ask
         if self.timeout_by is None:
