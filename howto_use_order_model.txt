@@ -1,0 +1,10 @@
+Guide to Order model
+
+1) Create a new Order object with orderer and location kwargs
+2) Create new OrderItem objects with order, menu_item, quantity, notes kwargs
+3) Retrieve total price with order_object.total_price
+
+4) Update with a fulfilling user with order_object.fulfil_order(<user>)
+5) Exchange code with order_object.get_code() and .check_code(<code>)
+    This is a uuid.UUID object, but it can be modified if you want a shorter form
+6) Close order with order_object.close_order()
