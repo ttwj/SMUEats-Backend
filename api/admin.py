@@ -13,6 +13,6 @@ class MenuItemInline(admin.TabularInline):
 class MerchantAdmin(admin.ModelAdmin):
     inlines = [MenuItemInline]
 
-admin.site.register([OrderConfirmCode])
+admin.site.register([OrderConfirmCode, MerchantLocation])
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Merchant, MerchantAdmin)

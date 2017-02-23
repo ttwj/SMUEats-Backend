@@ -49,7 +49,7 @@ class Merchant(models.Model):
     
     name = models.CharField(max_length=100)
     image = models.ImageField('Image of store front', null=True, blank=True)
-    location = models.ForeignKey('MerchantLocation', on_delete=models.PROTECT, null=True)
+    location = models.ForeignKey('MerchantLocation', on_delete=models.PROTECT)
     location_str = models.CharField('Location (human readable)', max_length=100)
     # menu = 
     
@@ -61,6 +61,9 @@ class MerchantLocation(models.Model):
     '''
     name = models.CharField(max_length=100)
     image = models.ImageField('Image of location (eg. a food court)', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 class MenuItem(models.Model):
     '''Represents an item on a Merchant's menu that can be ordered
@@ -206,7 +209,11 @@ class Order(models.Model):
             assert False, 'time fulfilled is not none (stage check should have caught this)'
         
         return
-            
+    
+    def __str__(self):
+        return 'Order opened by {} on {}, stage: {}'.format(
+            self.orderer, self.time_placed, self.stage)
+    
     def save(self, *args, **kwargs):
         # default value doesn't work; don't ask
         if self.timeout_by is None:
