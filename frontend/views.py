@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import generic
 
-from api.models import Order, Merchant
+from api.models import Order, Merchant, MerchantLocation
 
 
 def index(request):
@@ -11,14 +11,14 @@ def index(request):
     return render(request, "index.html", context)
 
 
-class OrderView(generic.ListView):
-    template_name = 'order/index.html'
-    context_object_name = 'order_merchant_list'
+def list_merchants_index(request):
+    locations = MerchantLocation.objects.all()
+    merchant_dict = {}
+    for location in locations:
+        merchant_dict[location.name] = Merchant.objects.filter(location=location).all()
+    context = {
+        'locations': merchant_dict
+    }
 
-    def get_queryset(self):
-        """
-        Return the last five published polls (not including those set to be
-        published in the future).
-        """
+    return render(request, "order/index.html", context)
 
-        return Merchant.objects.order_by('location').all()
