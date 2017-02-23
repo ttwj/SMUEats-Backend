@@ -6,6 +6,7 @@ class OrderItemInline(admin.TabularInline):
 
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
+    readonly_fields = ['stage', 'total_price']
 
 class MenuItemInline(admin.TabularInline):
     model = MenuItem
@@ -13,6 +14,10 @@ class MenuItemInline(admin.TabularInline):
 class MerchantAdmin(admin.ModelAdmin):
     inlines = [MenuItemInline]
 
-admin.site.register([OrderConfirmCode, MerchantLocation])
+class OrderConfirmCodeAdmin(admin.ModelAdmin):
+    readonly_fields = ['is_expired', 'short_code']
+
+admin.site.register([MerchantLocation])
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Merchant, MerchantAdmin)
+admin.site.register(OrderConfirmCode, OrderConfirmCodeAdmin)

@@ -159,20 +159,20 @@ class Order(models.Model):
         try:
             if self.confirm_code.is_expired:
                 self.confirm_code.delete()
-                return self._create_code().code
+                return self._create_code().short_code
             else:
-                return self.confirm_code.code
+                return self.confirm_code.short_code
         except OrderConfirmCode.DoesNotExist:
             # create it
-            return self._create_code().code
+            return self._create_code().short_code
             
     def check_code(self, foreign_code):
-        '''Check a foreign code with the confirm code. Takes a uuid.UUID object.
+        '''Check a foreign code with the confirm code. Takes a string.
         '''
         if self.confirm_code.is_expired:
             return False
         else:
-            return self.confirm_code.code == foreign_code
+            return self.confirm_code.short_code == foreign_code
     
     def fulfil_order(self, new_fulfiller):
         '''Try and associate a fulfilling user to this order
@@ -249,3 +249,12 @@ class OrderConfirmCode(models.Model):
     @property
     def is_expired(self):
         return timezone.now() > self.expire_by
+    
+    @property
+    def short_code(self):
+        '''Get the short form of the code
+        '''
+        return str(int.from_bytes(self.code.bytes, byteorder='big'))[:10]
+    
+    def __str__(self):
+        return 'Code for order by {} placed on {}, expired: {}'.format(self.order.orderer, self.order.time_placed, self.is_expired)
