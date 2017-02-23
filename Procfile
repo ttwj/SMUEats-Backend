@@ -1,1 +1,1 @@
-web: gunicorn -b 0.0.0.0:$PORT backend.wsgi
+web: gunicorn -b 0.0.0.0:$PORT smueats_backend.wsgi
