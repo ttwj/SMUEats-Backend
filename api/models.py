@@ -49,11 +49,18 @@ class Merchant(models.Model):
     
     name = models.CharField(max_length=100)
     image = models.ImageField('Image of store front', null=True, blank=True)
+    location = models.ForeignKey('MerchantLocation', on_delete=models.PROTECT, null=True)
     location_str = models.CharField('Location (human readable)', max_length=100)
     # menu = 
     
     def __str__(self):
         return self.name
+
+class MerchantLocation(models.Model):
+    '''Represents a physical location for a merchant.
+    '''
+    name = models.CharField(max_length=100)
+    image = models.ImageField('Image of location (eg. a food court)', null=True, blank=True)
 
 class MenuItem(models.Model):
     '''Represents an item on a Merchant's menu that can be ordered
@@ -136,6 +143,8 @@ class Order(models.Model):
     DEFAULT_CODE_VALIDITY = dt.timedelta(minutes=5)
     
     def _create_code(self):
+        '''Please don't call this
+        '''
         now = timezone.now()
         exp = now + self.DEFAULT_CODE_VALIDITY
         return OrderConfirmCode.objects.create(
@@ -183,6 +192,19 @@ class Order(models.Model):
                 
             self.time_committed = now
             self.save()
+        return
+    
+    def close_order(self):
+        '''Close the order (handle the code matching yourself)
+        '''
+        if self.stage is not self.Stage.COMMITTED:
+            raise ValueError('Can\'t close an uncommitted order')
+        
+        if self.time_fulfilled is None:
+            self.time_fulfilled = timezone.now()
+        else:
+            assert False, 'time fulfilled is not none (stage check should have caught this)'
+        
         return
             
     def save(self, *args, **kwargs):
