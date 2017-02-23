@@ -1,0 +1,29 @@
+.smu-card-header-pic .card-header {
+    height: 40vw;
+    background-size: cover;
+    background-position: center;
+    font-size: 5vh;
+}
+.sm-page-image-header {
+    height: 40vw;
+    background-size: cover;
+    background-position: center;
+    font-size: 5vh;
+}
+.sm-checkout-wrapper {
+    text-align:center;
+}
+
+.sm-checkout-title {
+    font-size: 3em;
+    text-align: center;
+    /* color: #fff !important; */
+    background: #fff;
+    width: auto;
+    margin-left:auto;
+    margin-right:auto;
+    display:inline-block;
+    padding: 15px 30px 15px 30px;
+    border-radius:35px;
+
+}
