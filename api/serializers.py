@@ -12,4 +12,11 @@ To deserialize -- s = MySerializer(data=my_raw_python_data); assert s.is_valid()
 '''
 
 
+class MerchantSerializer(serializer.ModelSerializer):
+    menu = PrimaryKeyRelatedField(allow_empty=True, many=True,
+        queryset=MenuItem.objects.all())
+    class Meta:
+        model = Merchant
+        fields = ('id', 'name', 'image', 'location_str', 'menu')
 
+class OrderSerializer()

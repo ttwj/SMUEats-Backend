@@ -80,7 +80,8 @@ class Order(models.Model):
     fulfiller = models.ForeignKey(settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT, related_name='fulfilled_orders',
         null=True, blank=True)
-    items = models.ManyToManyField('MenuItem', through='OrderItem')
+    # this doesnt seem like a good idea...????
+    # items = models.ManyToManyField('MenuItem', through='OrderItem')
     
     # total_price = models.DecimalField(**MONEY_PRECISION, default=Decimal(0), blank=True)
     # ^ this is a f**kwarg'in bad idea
@@ -130,20 +131,22 @@ class Order(models.Model):
     
     def _create_code(self):
         now = timezone.now()
-        exp = now + DEFAULT_CODE_VALIDITY
+        exp = now + self.DEFAULT_CODE_VALIDITY
         return OrderConfirmCode.objects.create(
             time_created=now, expire_by=exp, order=self)
     
     def get_code(self):
         '''Get the current code in use if it's valid, otherwise create one
         '''
-        if self.confirm_code is None:
-            return _create_code().code
-        elif self.confirm_code.is_expired:
-            self.confirm_code.delete()
-            return _create_code().code
-        else:
-            return self.confirm_code.code
+        try:
+            if self.confirm_code.is_expired:
+                self.confirm_code.delete()
+                return self._create_code().code
+            else:
+                return self.confirm_code.code
+        except OrderConfirmCode.DoesNotExist:
+            # create it
+            return self._create_code().code
             
     def check_code(self, foreign_code):
         '''Check a foreign code with the confirm code. Takes a uuid.UUID object.
@@ -168,7 +171,7 @@ class OrderItem(models.Model):
     http://www.vertabelo.com/blog/technical-articles/serving-delicious-food-and-data-a-data-model-for-restaurants
     '''
     
-    order = models.ForeignKey('Order', on_delete=models.CASCADE)
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='items')
     menu_item = models.ForeignKey('MenuItem', on_delete=models.PROTECT)
     quantity = models.IntegerField(default=1)
     notes = models.TextField(blank=True)
