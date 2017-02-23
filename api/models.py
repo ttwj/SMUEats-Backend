@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import F, Q, Sum
 from django.conf import settings
 from django.utils import timezone
+from django.db import transaction as dbtransaction
 
 # This is a testing convenience. Do not directly reference the User type in code
 from django.contrib.auth.models import User
@@ -80,6 +81,7 @@ class Order(models.Model):
     fulfiller = models.ForeignKey(settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT, related_name='fulfilled_orders',
         null=True, blank=True)
+    location = models.TextField(blank=True)
     # this doesnt seem like a good idea...????
     # items = models.ManyToManyField('MenuItem', through='OrderItem')
     
@@ -126,6 +128,10 @@ class Order(models.Model):
         else:
             assert False, 'if/elif fallthrough in stage property'
     
+    # order creation
+    # def create_order(self, *items):
+        
+    
     # confirm code
     DEFAULT_CODE_VALIDITY = dt.timedelta(minutes=5)
     
@@ -155,6 +161,29 @@ class Order(models.Model):
             return False
         else:
             return self.confirm_code.code == foreign_code
+    
+    def fulfil_order(self, new_fulfiller):
+        '''Try and associate a fulfilling user to this order
+        
+        Possible concurrency problems here!!!!
+        '''
+        now = timezone.now()
+        if self.timeout_by < now:
+            raise ValueError('This order has expired')
+        
+        with dbtransaction.atomic():
+            # only one at a time
+            if new_fulfiller.fulfilled_orders.select_for_update().filter(time_fulfilled__isnull=True).exists():
+                raise ValueError('Fulfil candidate has open order')
+
+            if self.fulfiller is None:
+                self.fulfiller = new_fulfiller
+            else:
+                raise ValueError('Order is already fulfilled')
+                
+            self.time_committed = now
+            self.save()
+        return
             
     def save(self, *args, **kwargs):
         # default value doesn't work; don't ask
