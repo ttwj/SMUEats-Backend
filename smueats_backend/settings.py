@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework', # Django REST framework
-    'guardian', # Django Guardian (Object/row level permissions)
+    #'guardian', # Django Guardian (Object/row level permissions)
     'smu_sso',
     'frontend'
 ]
@@ -112,9 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'smu_sso.backends.SSOBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
+    #'guardian.backends.ObjectPermissionBackend',
 )
 
 # Internationalization
@@ -146,7 +145,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
-
-# Custom SMU-Auth
-
-AUTH_USER_MODEL = 'smu_sso.SSOUser'
