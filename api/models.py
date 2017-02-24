@@ -122,10 +122,13 @@ class Order(models.Model):
         FULFILLED = 3
         TIMEOUT = 4
         PAID = 5
+        UNSAVED = 6
     
     @property
     def stage(self):
-        if self.is_paid is True:
+        if self.pk is None:
+            return self.Stage.UNSAVED
+        elif self.is_paid is True:
             return self.Stage.PAID
         elif self.time_fulfilled is not None:
             return self.Stage.FULFILLED
