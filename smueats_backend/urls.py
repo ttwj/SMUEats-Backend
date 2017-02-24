@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.conf.urls.static import static
 
 import frontend.urls
+import smu_sso.urls
 from smueats_backend import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^frontend/', include(frontend.urls.urlpatterns)),
+    url(r'^smu_sso/', include(smu_sso.urls.urlpatterns)),
 ] + static(settings.STATIC_URL)

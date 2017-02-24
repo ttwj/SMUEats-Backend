@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.db import transaction as dbtransaction
 
 # This is a testing convenience. Do not directly reference the User type in code
-from django.contrib.auth.models import User
+from smu_sso.backends import SSOUser as User
 
 from enum import Enum
 import datetime as dt
