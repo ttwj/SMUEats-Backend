@@ -1,16 +1,15 @@
-
 <div data-page="store" class="page">
     <div class="navbar">
         <div class="navbar-inner">
 
-            <div class="left"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
+            <div class="left"><a href="{% url 'frontend-order-index' %}" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Order</div>
             <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
 
         </div>
     </div>
     <div class="toolbar tabbar">
-        <div class="toolbar-inner"><a class="active tab-link">Koufu</a></div>
+        <div class="toolbar-inner"><a class="active tab-link">{{ merchant.name }}</a></div>
     </div>
     <div class="toolbar toolbar-bottom">
         <a href="index.html" class="link">
@@ -33,15 +32,17 @@
     <div class="page-content">
         <div class="sm-page-image-header">$Store Description$</div>
 
+        {% for item in items %}
+             <a href="dish-order.html">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="left"><div class="content-block-title">{{ item.name }}</div></div>
+                        <div class="right"><div class="content-block-title">{{ item.price }}</div></div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
 
-        <a href="dish-order.html">
-        <div class="card">
-            <div class="card-content">
-                <div class="left"><div class="content-block-title">$Item Name</div></div>
-                <div class="right"><div class="content-block-title">$Item Price</div></div>
-               </div>
-        </div>
-        </a>
         <!--<a href="dish-order.html" class="button button-raised demo-picker-modal">Order Item</a>-->
 
     </div>
