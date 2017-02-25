@@ -1,11 +1,13 @@
 from django.db import models
-from django.db.models import F, Q, Sum
+from django.db.models import F, Q, Sum, Count
 from django.conf import settings
 from django.utils import timezone
 from django.db import transaction as dbtransaction
+from django.core.exceptions import ValidationError
 
 # This is a testing convenience. Do not directly reference the User type in code
-from smu_sso.backends import SSOUser as User
+from smu_sso.backends import SSOUser
+from django.contrib.auth.models import User
 
 from enum import Enum
 import datetime as dt
@@ -141,6 +143,13 @@ class Order(models.Model):
         else:
             assert False, 'if/elif fallthrough in stage property'
     
+    @property
+    def unique_merchants(self):
+        return self.items.aggregate(
+            merchant_count=Count('menu_item__merchant', distinct=True)
+        )['merchant_count']
+
+    
     # order creation
     # def create_order(self, *items):
         
@@ -206,16 +215,22 @@ class Order(models.Model):
         if self.stage is not self.Stage.COMMITTED:
             raise ValueError('Can\'t close an uncommitted order')
         
-        if self.time_fulfilled is None:
-            self.time_fulfilled = timezone.now()
-        else:
-            assert False, 'time fulfilled is not none (stage check should have caught this)'
+        assert self.time_fulfilled is None, 'time fulfilled is not none (stage check should have caught this)'
+        self.time_fulfilled = timezone.now()
         
         return
     
     def __str__(self):
         return 'Order opened by {} on {}, stage: {}'.format(
             self.orderer, self.time_placed, self.stage)
+    
+    def clean(self):
+        # TODO make a foreign key that links here, trigger the clean check
+        # TODO make this run all the time (include in save())?
+        unique_merchants = self.unique_merchants
+        assert unique_merchants >= 0, 'Negative merchants?'
+        if unique_merchants > 1:
+            raise ValidationError('Only zero or one unique merchant(s) allowed')
     
     def save(self, *args, **kwargs):
         # default value doesn't work; don't ask
@@ -260,4 +275,5 @@ class OrderConfirmCode(models.Model):
         return str(int.from_bytes(self.code.bytes, byteorder='big'))[:10]
     
     def __str__(self):
-        return 'Code for order by {} placed on {}, expired: {}'.format(self.order.orderer, self.order.time_placed, self.is_expired)
+        return 'Code for order by {} placed on {}, expired: {}'.format(
+            self.order.orderer, self.order.time_placed, self.is_expired)
