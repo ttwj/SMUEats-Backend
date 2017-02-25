@@ -22,14 +22,14 @@ def sso(request, format=None):
 
 
     if nric and details:
-        sso_user = sso_authenticate(username=nric, password=details)
+        sso_user = sso_authenticate(username=nric, details=details)
         if sso_user:
             # yay we're logged in!
             #sso_user.user.backend = ModelBackend
             login(request, sso_user.user) #give da cookiez
             print("we're logged in!")
-            return Response("Logged in!")
-            #return redirect(views.index)
+            #return Response("Logged in!")
+            return redirect(views.index)
         else:
             return Response("Invalid username/password combination!")
 
