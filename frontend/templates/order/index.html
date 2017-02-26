@@ -9,10 +9,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#2196f3">
     <title>Framework7 Material</title>
-        <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
+    <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
     <link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css'  %}">
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../css/smueats.css" type="text/css">
+    <link rel="stylesheet" href="{%  static 'css/smueats.css'  %}" type="text/css">
     <link rel="icon" href="img/icon.png">
 </head>
 <body>
@@ -31,14 +31,9 @@
 
                     </div>
                 </div>
-                q  <div class="toolbar toolbar-bottom">
-                <div class="toolbar-inner">
-                    <a href="#tab-1" class="link">
-                        <i class="icon material-icons">Total: $10</i>
-                    </a>
-                    <a href="checkout.html" class="link"><i class="icon material-icons">Checkout</i></a>
-                </div>
-            </div>
+
+                {% include 'order/checkout-toolbar.html' %}
+
                 <div class="toolbar tabbar">
                     <div class="toolbar-inner">
 
@@ -56,7 +51,7 @@
 
                                 {% for merchant in merchants %}
                                 <div class="card">
-                                    <a href="{% url 'frontend-order-merchant-index' merchant_id=merchant.id %}"><div style="" valign="bottom" class="card-header">{{ merchant.name }}</div>
+                                    <a href="{% url 'frontend-order-merchant-index' merchant_id=merchant.id %}" style="ripple"><div style="" valign="bottom" class="card-header">{{ merchant.name }}</div>
                                         <div class="card-content">
                                             <div class="card-content-inner">
                                                 <p class="color-green">{{ merchant.name }}</p>
@@ -99,7 +94,9 @@
 
 
     <script type="text/javascript" src="{% static 'js/framework7.js' %}"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="{% static 'js/smueats.js' %}"></script>
+
 </body>
 </html>
 

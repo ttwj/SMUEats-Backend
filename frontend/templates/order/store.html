@@ -11,36 +11,23 @@
     <div class="toolbar tabbar">
         <div class="toolbar-inner"><a class="active tab-link">{{ merchant.name }}</a></div>
     </div>
-    <div class="toolbar toolbar-bottom">
-        <a href="index.html" class="link">
-        <div class="toolbar-inner">
-            <a href="#tab-1" class="link">
-                <i class="icon material-icons">Total: $10</i>
-            </a>
-            <i class="icon material-icons">Cart</i>
-        </div>
-        </a>
-    </div>
-    <div class="toolbar toolbar-bottom">
-        <div class="toolbar-inner">
-            <a href="#tab-1" class="link">
-                <i class="icon material-icons">Total: $10</i>
-            </a>
-            <a href="cart.html" class="link"><i class="icon material-icons">Checkout</i></a>
-        </div>
-    </div>
+
+    {% include 'order/checkout-toolbar.html' %}
     <div class="page-content">
         <div class="sm-page-image-header">$Store Description$</div>
 
         {% for item in items %}
-             <a href="dish-order.html">
+
                 <div class="card">
+
                     <div class="card-content">
+                          <a href="#" class="ripple menu-item-href" item-id="{{ item.id }}">
                         <div class="left"><div class="content-block-title">{{ item.name }}</div></div>
                         <div class="right"><div class="content-block-title">{{ item.price }}</div></div>
                     </div>
+                       </a>
                 </div>
-            </a>
+
         {% endfor %}
 
         <!--<a href="dish-order.html" class="button button-raised demo-picker-modal">Order Item</a>-->
