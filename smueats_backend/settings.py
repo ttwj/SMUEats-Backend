@@ -87,7 +87,8 @@ WSGI_APPLICATION = 'smueats_backend.wsgi.application'
 
 import dj_database_url
 DATABASES = {}
-DATABASES['default'] =  dj_database_url.config(default='postgres://smueats_django:zGlkxY12rPPNskW@127.0.0.1/smueats')
+#DATABASES['default'] =  dj_database_url.config(default='postgres://smueats_django:zGlkxY12rPPNskW@127.0.0.1/smueats')
+DATABASES['default'] = dj_database_url.config(default='postgres://postgres:adf7297a284f92e4d2ec3d8b6407fd81@beepbeep.rocks:31872/smueats_devel')
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
 DATABASES['OPTIONS'] = {
         'isolation_level': psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE,
