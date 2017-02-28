@@ -149,6 +149,16 @@ class Order(models.Model):
             merchant_count=Count('menu_item__merchant', distinct=True)
         )['merchant_count']
 
+    # payment method
+    NONE = 0
+    WALLET = 1
+    CASH = 2
+    method_choices = (
+        (NONE, 'There *is* such a thing as a free lunch'),
+        (WALLET, 'Stored value wallet'),
+        (CASH, 'Cash on delivery')
+    )
+    payment_method = models.SmallIntegerField(choices=method_choices)
     
     # order creation
     # def create_order(self, *items):
@@ -226,7 +236,6 @@ class Order(models.Model):
     
     def clean(self):
         # TODO make a foreign key that links here, trigger the clean check
-        # TODO make this run all the time (include in save())?
         unique_merchants = self.unique_merchants
         assert unique_merchants >= 0, 'Negative merchants?'
         if unique_merchants > 1:
@@ -236,6 +245,7 @@ class Order(models.Model):
         # default value doesn't work; don't ask
         if self.timeout_by is None:
             self.timeout_by = self.time_placed + DEFAULT_TIMEOUT_LENGTH
+        self.clean()
         
         super().save(*args, **kwargs)
 
