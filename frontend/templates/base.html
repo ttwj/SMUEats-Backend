@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+     {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#2196f3">
+    <title>SMUEats</title>
+    <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
+    <link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css'  %}">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="{%  static 'css/smueats.css'  %}" type="text/css">
+    <link rel="icon" href="img/icon.png">
+</head>
+<body>
+
+<div class="views">
+    <div class="view view-main">
+
+        <div class="pages navbar-fixed">
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+<div class="picker-modal picker-modal-store">
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            <div class="left"><a class="link" id="cart-item-name">Add to cart</a></div>
+            <div class="right"><a href="#" class="link close-picker">Cancel</a></div>
+        </div>
+    </div>
+    <div class="picker-modal-inner">
+      <div class="content-block">
+
+  <div class="list-block">
+
+              <div class="item-content">
+                   <div class="item-title label">Quantity:</div>
+                  <div class="item-inner">
+
+          <div class="item-input item-input-field">
+              <input type="number" placeholder="1" text="1">
+          </div>
+              </div></div>
+
+
+              <div class="item-content">
+                  <div class="label item-title">Notes:</div>
+                  <div class="item-inner">
+
+          <div class="item-input item-input-field">
+              <textarea id="notes" class=""></textarea>
+          </div>
+              </div></div>
+
+
+
+
+
+
+  </div>
+
+
+
+
+    <a id="cart-add-item" class="button bg-green color-white">Add to cart</a>
+      </div>
+    </div>
+
+</div>
+
+
+
+</div>
+
+
+
+    <script type="text/javascript" src="{% static 'js/framework7.js' %}"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/smueats.js' %}"></script>
+
+</body>
+</html>
+
+
+

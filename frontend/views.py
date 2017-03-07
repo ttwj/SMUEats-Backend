@@ -15,6 +15,7 @@ def index(request):
     context = {}
     return render(request, "index.html", context)
 
+
 @api_view(['GET'])
 def add_cart(request, item_id):
     try:
@@ -27,6 +28,24 @@ def add_cart(request, item_id):
         else:
             request.session['total'] = str(item.price)
             request.session['cart'] = [item_id]
+        print({'total': str(request.session['total'])})
+        return Response({'total': str(request.session['total'])})
+
+    except:
+        logging.exception("exception 3")
+        return Response({'error': 'Dunno what happened'})
+
+
+@api_view(['GET'])
+def del_cart(request, item_id):
+    try:
+        item = MenuItem.objects.get(id=item_id)
+        if 'cart' in request.session:
+            total = Decimal(request.session['total'])
+            total -= item.price
+            request.session['total'] = str(total)
+            request.session['cart'].remove(item_id)
+
         print({'total': str(request.session['total'])})
         return Response({'total': str(request.session['total'])})
 
@@ -48,12 +67,11 @@ def checkout_index(request):
         for orderid in request.session['cart']:
             orders.append(MenuItem.objects.get(id=orderid))
         context = {'orders': orders}
-        return render(request, "order/checkout.html", context)
+        return render(request, "order/checkout-view-cart.html", context)
 
     except:
         logging.exception("exception @ checkout")
-        return render(request, "order/checkout.html")
-
+        return render(request, "order/checkout-view-cart.html")
 
 
 def list_merchants_index(request):
@@ -68,3 +86,10 @@ def list_merchants_index(request):
     print(context)
 
     return render(request, "order/index.html", context)
+
+
+def place_order(request):
+    order = Order.objects.create({
+
+    })
+    return render(request, "order/placed.html", context)

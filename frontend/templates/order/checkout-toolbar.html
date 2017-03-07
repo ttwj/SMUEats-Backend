@@ -1,8 +1,8 @@
 <div class="toolbar toolbar-bottom checkout-toolbar {% if not request.session.total %} navbar-hidden {% endif %}">
     <div class="toolbar-inner">
             <a class="link">
-                <i class="icon material-icons checkout-total">Total: ${% if not request.session.total %}0.00{% else %}{{ request.session.total }}{% endif %}</i>
+                <i class="icon checkout-total">Total: ${% if not request.session.total %}0.00{% else %}{{ request.session.total }}{% endif %}</i>
             </a>
-            <a href="{% url 'checkout-index' %}" id="checkout-link" class="link" data-ignore-cache="true"><i class="icon material-icons">Checkout</i></a>
+            <a href="{% url 'checkout-index' %}" id="checkout-link" class="link" data-ignore-cache="true"><i class="icon">Checkout</i></a>
     </div>
 </div>

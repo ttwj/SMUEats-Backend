@@ -130,14 +130,14 @@ class Order(models.Model):
     def stage(self):
         if self.pk is None:
             return self.Stage.UNSAVED
-        elif self.is_paid is True:
-            return self.Stage.PAID
         elif self.time_fulfilled is not None:
             return self.Stage.FULFILLED
         elif self.time_committed is not None:
             return self.Stage.COMMITTED
         elif self.timeout_by < timezone.now():
             return self.Stage.TIMEOUT
+        elif self.is_paid is True:
+            return self.Stage.PAID
         elif self.time_placed is not None:
             return self.Stage.PLACED
         else:

@@ -7281,6 +7281,9 @@
             }
         
             function rippleTouchStart (el, x, y) {
+                console.log(el);
+                console.log(x);
+                console.log(y);
                 rippleTarget = findRippleElement(el);
                 if (!rippleTarget || rippleTarget.length === 0) {
                     rippleTarget = undefined;

@@ -1,104 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-     {% load static %}
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="theme-color" content="#2196f3">
-    <title>Framework7 Material</title>
-    <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
-    <link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css'  %}">
-    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{%  static 'css/smueats.css'  %}" type="text/css">
-    <link rel="icon" href="img/icon.png">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+<div data-page="tabs-static" class="page toolbar-fixed">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="center">SMUEats</div>
 
-<div class="views">
-    <div class="view view-main">
+            <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon material-icons">home</i></a></div>
 
-        <div class="pages navbar-fixed">
-
-            <div data-page="tabs-static" class="page toolbar-fixed">
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <div class="center">SMUEats</div>
-
-                        <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
-
-                    </div>
-                </div>
-
-                {% include 'order/checkout-toolbar.html' %}
-
-                <div class="toolbar tabbar">
-                    <div class="toolbar-inner">
-
-                         {% for key, value in locations.items %}
-                        <a href="#tab{{ forloop.counter }}" class="tab-link  {% if forloop.counter == 1 %}active{% endif %}">{{ key }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="tabs">
-
-                    {% for location, merchants in locations.items %}
-                        <div id="tab{{ forloop.counter }}" class="page-content tab {% if forloop.counter == 1 %}active{% endif %}">
-                            <div class="content-block">
-
-
-                                {% for merchant in merchants %}
-                                <div class="card">
-                                    <a href="{% url 'frontend-order-merchant-index' merchant_id=merchant.id %}" style="ripple"><div style="" valign="bottom" class="card-header">{{ merchant.name }}</div>
-                                        <div class="card-content">
-                                            <div class="card-content-inner">
-                                                <p class="color-green">{{ merchant.name }}</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                {% endfor %}
-
-
-                            </div>
-                        </div>
-                        {% endfor %}
-
-
-
-                    <div id="tab1" class="page-content tab active">
-                        <div class="content-block">
-
-
-                            <div class="card smu-card-header-pic">
-                                <a href="store.html"><div style="background-image:url(http://lorempixel.com/1000/600/nature/3/)" valign="bottom" class="card-header color-white no-border">Shop Name</div>
-                                    <div class="card-content">
-                                        <div class="card-content-inner">
-                                            <p class="color-green">Open Tomorrow!</p>
-                                            <i class="color-gray">"Good chickens and potatoes"</i></div>
-                                    </div></a>
-                                <!--<div class="card-footer"><a href="#" class="link">Like</a><a href="#" class="link">Read more</a></div>-->
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
+
+    {% include 'order/checkout-toolbar.html' %}
+
+    <div class="toolbar tabbar">
+        <div class="toolbar-inner">
+
+             {% for key, value in locations.items %}
+            <a href="#tab{{ forloop.counter }}" class="tab-link  {% if forloop.counter == 1 %}active{% endif %}">{{ key }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="tabs">
+
+        {% for location, merchants in locations.items %}
+            <div id="tab{{ forloop.counter }}" class="page-content tab {% if forloop.counter == 1 %}active{% endif %}">
+                <div class="content-block">
+
+
+                    {% for merchant in merchants %}
+                    <div class="card">
+                        <a href="{% url 'frontend-order-merchant-index' merchant_id=merchant.id %}" style="ripple">
+                            <div style="" valign="bottom" class="card-header">{{ merchant.name }}</div>
+                            <div class="card-content">
+                                <div class="card-content-inner">
+                                    <p class="color-green">{{ merchant.name }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+
+
+                </div>
+            </div>
+            {% endfor %}
+
+    </div>
 </div>
-
-
-
-    <script type="text/javascript" src="{% static 'js/framework7.js' %}"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script type="text/javascript" src="{% static 'js/smueats.js' %}"></script>
-
-</body>
-</html>
-
-
-
+{% endblock %}

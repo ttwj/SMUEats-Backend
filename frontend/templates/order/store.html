@@ -1,10 +1,10 @@
-<div data-page="store" class="page">
+<div data-page="store" class="page toolbar-fixed">
     <div class="navbar">
         <div class="navbar-inner">
 
             <div class="left"><a href="{% url 'frontend-order-index' %}" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Order</div>
-            <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div>
+            <div class="right"><a href="{% url 'index' %}" class="external open-panel link icon-only"><i class="material-icons">home</i></a></div>
 
         </div>
     </div>
@@ -13,34 +13,37 @@
     </div>
 
     {% include 'order/checkout-toolbar.html' %}
-    <div class="page-content">
-        <div class="sm-page-image-header">$Store Description$</div>
+
+
+    <div class="tabs">
+        <div class="page-content active tab">
+             <div class="content-block">
 
         {% for item in items %}
 
                 <div class="card">
-
-                    <div class="card-content">
-                          <a href="#" class="ripple menu-item-href" item-id="{{ item.id }}">
-                        <div class="left"><div class="content-block-title">{{ item.name }}</div></div>
-                        <div class="right"><div class="content-block-title">{{ item.price }}</div></div>
-                    </div>
+                     <a href="#" class="ripple menu-item-href menu-item-href-order" item-id="{{ item.id }}" item-name="{{ item.name }}">
+                           <div class="card-content">
+                               <div class="card-content-inner">
+                                <div class="row">
+                                    <div class="col-80">{{ item.name }}</div>
+                                     <div class="col-20 color-green">{{ item.price }}</div>
+                                </div>
+                               </div>
+                           </div>
                        </a>
+
                 </div>
 
         {% endfor %}
+        </div>
+
+        </div>
+
 
         <!--<a href="dish-order.html" class="button button-raised demo-picker-modal">Order Item</a>-->
 
     </div>
-</div>
-
-<div class="picker-modal picker-modal-demo">
-    <div class="toolbar">
-        <div class="toolbar-inner">
-            <div class="left"></div>
-            <div class="right"><a href="#" class="link close-picker">Done</a></div>
-        </div>
     </div>
-
 </div>
+
