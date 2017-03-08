@@ -20,12 +20,18 @@ from django.conf.urls.static import static
 from django.contrib.auth import views
 import frontend.urls
 import sms_sso.urls
+from simple_sso.sso_client.client import Client
 from smueats_backend import settings
+
+
+sso_client = Client(settings.SSO_SERVER, settings.SSO_PUBLIC_KEY, settings.SSO_PRIVATE_KEY)
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^frontend/', include(frontend.urls.urlpatterns)),
     url(r'^sms_sso/', include(sms_sso.urls.urlpatterns)),
+    url(r'^sso/', include(sso_client.get_urls())),
 
 
 

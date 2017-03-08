@@ -4,11 +4,14 @@ Django==1.10.5
 django-guardian==1.4.6
 djangorestframework==3.5.4
 gunicorn==19.6.0
+itsdangerous==0.24
 Markdown==2.6.8
 olefile==0.44
 packaging==16.8
 Pillow==4.0.0
 psycopg2==2.6.2
 pyparsing==2.1.10
+requests==2.13.0
 six==1.10.0
+webservices==0.7
 whitenoise==3.3.0

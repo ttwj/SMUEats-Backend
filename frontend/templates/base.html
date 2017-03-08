@@ -9,11 +9,12 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#2196f3">
     <title>SMUEats</title>
-    <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
-    <link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css'  %}">
+
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+    <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
+    <link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css' %}">
     <link rel="stylesheet" href="{%  static 'css/smueats.css'  %}" type="text/css">
     <link rel="icon" href="img/icon.png">
 </head>
@@ -84,6 +85,24 @@
   <script type="text/javascript" src="{% static 'js/inobounce.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'js/framework7.js' %}"></script>
+
+
+  <!-- <script>
+      (function () {
+        if (Framework7.prototype.device.android) {
+              Dom7('head').append(
+                  '<link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">' +
+                  '<link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css' %}">'
+              );
+          }
+          else {
+              Dom7('head').append(
+                          '<link rel="stylesheet" href="{%  static 'css/framework7.ios.css'  %}">' +
+                  '<link rel="stylesheet" href="{%  static 'css/framework7.ios.colors.css' %}">'
+              );
+          }
+      })();
+    </script>-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script type="text/javascript" src="{% static 'js/smueats.js' %}"></script>
 
