@@ -61,7 +61,6 @@ def del_cart(request, cart_id):
             request.session['total'] = str(total)
             request.session['cart'][int(cart_id)] = None
 
-
         print({'total': str(request.session['total'])})
         return Response({'total': str(request.session['total'])})
 
