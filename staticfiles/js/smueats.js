@@ -104,7 +104,7 @@ $$(document).on('pageInit', function() {
 		if (!Number.isInteger(quantity) || quantity < 1) {
 			quantity = 1;
 		}
-		$.post("http://http://188.166.223.156:27620/frontend/order/add_cart/",
+		$.post("http://188.166.223.156:27620/frontend/order/add_cart/",
 			{
 				'quantity': quantity,
 				'notes': $$('#cart-item-notes').val(),
@@ -147,7 +147,7 @@ $$(document).on('pageInit', function() {
 		var item_id = $$(this).attr('cart-id');
 		smuEats.confirm('Are you sure you want to delete this item?', function() {
 
-			$.getJSON("http://http://188.166.223.156:27620/frontend/order/del_cart/" + item_id, function(data) {
+			$.getJSON("http://188.166.223.156:27620/frontend/order/del_cart/" + item_id, function(data) {
 				if (data.total == undefined) {
 				//ugh oh error
 				smuEats.alert("Error: Could not delete item from cart?!    :((((");
