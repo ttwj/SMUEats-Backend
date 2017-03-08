@@ -17,10 +17,9 @@
                 {% elif next %}
                     <div class="content-block-inner bg-red color-white">
                         {% if user.is_authenticated %}
-                            <p>Your account doesn't have access to this page. To proceed,
-                                please login with an account that has access.</p>
+                            <p>Your login session has expired</p>
                         {% else %}
-                            <p>Please login to see this page.</p>
+                            <p>Please login again :)</p>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -50,8 +49,8 @@
                     </ul>
                 </div>
                 <div class="list-block">
-                    <div class="content-block"><a id="login-button" href="#"
-                                                  class="button bg-green color-white">LOGIN</a></div>
+                    <div class="content-block"><a
+                                                  class="button bg-green color-white login-button">LOGIN</a></div>
                     <div class="list-block-label">Some text about login information.<br>Lorem ipsum dolor sit amet,
                         consectetur adipiscing elit.
                     </div>

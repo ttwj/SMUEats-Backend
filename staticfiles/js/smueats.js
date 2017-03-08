@@ -36,7 +36,7 @@ function sleep(ms) {
 $(document).ready(function() {
 
     //for some strange reason Dom7 doesn't want to work here o_O
-    $('#login-button').click(function() {
+    $('.login-button').click(function() {
         $('#login-form').submit();
     });
 
@@ -75,6 +75,11 @@ $.ajaxSetup({
 });
 
 $$(document).on('pageInit', function() {
+
+    $$('.login-button').on('click', function() {
+        console.log('hi');
+        $('#login-form').submit();
+    });
 
     $$('.checkout-confirm-button').on('click', function() {
         var location = $$('#location').val();

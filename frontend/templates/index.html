@@ -6,7 +6,7 @@
         <div class="navbar-inner">
             <div class="center" style="font-size:15px; font-weight: 400;"><p>Hello, {{ request.user.username }}!</p></div>
 
-            <div class="right"><a href="{% url 'frontend-logout' %}" class="open-panel link icon-only"><i class="icon material-icons">exit_to_app</i></a></div>
+            <div class="right"><a href="{% url 'frontend-logout' %}" class="external open-panel link icon-only"><i class="icon material-icons">exit_to_app</i></a></div>
 
         </div>
     </div>
@@ -15,7 +15,7 @@
 <div class="page-content">
 
             <div class="login-screen-title">SMUEats</div>
-            <div class="content-block"><a href="{% url 'frontend-order-index' %}" class="button button-big button-raised">Order</a></div>
+            <div class="content-block"><a data-ignore-cache="true" data-force="true" href="{% url 'frontend-order-index' %}" class="button button-big button-raised">Order</a></div>
             <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Deliver</a></div>
             <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Pending</a></div>
         </div>

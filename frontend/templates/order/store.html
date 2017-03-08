@@ -4,7 +4,7 @@
 
             <div class="left"><a href="{% url 'frontend-order-index' %}" class="back link icon-only"><i class="icon icon-back"></i></a></div>
             <div class="center">Order</div>
-            <div class="right"><a href="{% url 'index' %}" class="back open-panel link icon-only"><i class="material-icons">home</i></a></div>
+            {% include 'home-button.html' %}
 
         </div>
     </div>
@@ -22,7 +22,7 @@
         {% for item in items %}
 
                 <div class="card">
-                     <a href="#" class="ripple menu-item-href menu-item-href-order" item-id="{{ item.id }}" item-name="{{ item.name }}">
+                     <a class="ripple menu-item-href menu-item-href-order" item-id="{{ item.id }}" item-name="{{ item.name }}">
                            <div class="card-content">
                                <div class="card-content-inner">
                                 <div class="row">
