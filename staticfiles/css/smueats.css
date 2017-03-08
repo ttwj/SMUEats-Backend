@@ -132,3 +132,8 @@ transition: background 0.3s ease-in-out;
 .picker-modal .label {
     width:20% !important;
 }
+
+#checkout-page .card {
+    margin:0px !important;
+    margin-bottom: 1px !important;
+}

@@ -9,7 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from frontend import views
-from smu_sso.backends import sso_authenticate
+from sms_sso.backends import sso_authenticate
 
 
 @api_view(['POST'])

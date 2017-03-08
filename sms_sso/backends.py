@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 import json
 import logging
-from smu_sso.models import SSOUser
+from sms_sso.models import SSOUser
 
 
 def sso_authenticate(username=None, details=None):

@@ -1,5 +1,4 @@
-
-<div data-page="store" class="page">
+<div data-page="store" class="page" id="checkout-page">
     <div class="navbar bg-green">
         <div class="navbar-inner">
 
@@ -11,7 +10,9 @@
     <div class="toolbar tabbar bg-green color-white">
         <div class="toolbar-inner">
             <div class="tab-title" id="checkout-total" class="checkout-total ripple">Total: ${% if not request.session.total %}0.00{% else %}{{ request.session.total }}{% endif %}</div>
-            <div class="tab-title"><li href="payment.html" class="button bg-white color-green">Confirm</li></div>
+            <div class="tab-title">
+                <a class="button bg-white color-green checkout-confirm-button">Confirm</a>
+            </div>
 
         </div>
 
@@ -20,51 +21,57 @@
 
     <div class="page-content">
 
-     <div class="content-block-title">Details</div>
-    <div class="list-block">
+        <div class="content-block-title">Details</div>
+        <div class="list-block">
 
-        <ul>
-            <li>    <div class="item-content">
-            <div class="item-inner">
-          <div class="item-title label">Meetup location:</div>
-          <div class="item-input item-input-field">
-              <textarea id="notes" class=""></textarea>
-          </div>
-        </div></li>
-
-                <li><div class="item-content"> <div class="item-inner">
-          <div class="item-title label">Notes:</div>
-          <div class="item-input item-input-field">
-              <textarea id="notes" class=""></textarea>
-          </div>
-        </div></div></li>
-        </ul>
+       <form id="checkout-form" method="post" action="{% url 'checkout-confirm-order' %}">
+                {% csrf_token %}
+            <ul>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title label">Meetup location:</div>
+                            <div class="item-input item-input-field">
+                                <textarea id="location" class="" name="location"></textarea>
+                            </div>
+                        </div>
+                </li>
+            </ul>
+        </div>
 
 
-      </div>
+        <div class="content-block-title">Items <small><i>(Click to delete)</i></small></div>
+        <div class="card  bg-lightgreen">
+<div class="card-content"><div class="card-content-inner"><div class="row">
+                                <div class="col-20 color-white">Qty</div>
+                                <div class="col-60 color-white">Name</div>
+                                <div class="col-20 color-white">Price</div>
+                            </div></div></div>
 
 
-
-     <div class="content-block-title">Items</div>
-
-        {% for item in orders %}
+        </div>
+        {% for order in orders %}
             <div class="card">
-                     <a href="#" class="ripple menu-item-href menu-item-href-checkout" item-id="{{ item.id }}">
-                           <div class="card-content">
-                               <div class="card-content-inner">
-                                <div class="row">
-                                    <div class="col-80">{{ item.name }}</div>
-                                     <div class="col-20 color-green">{{ item.price }}</div>
-                                </div>
-                               </div>
-                           </div>
-                       </a>
+                <a href="#" class="ripple menu-item-href menu-item-href-checkout" cart-id="{{ order.index }}">
+                    <div class="card-content">
+                        <div class="card-content-inner">
+                            <div class="row">
+                                <div class="col-20 color-red"> {{ order.quantity }}</div>
+                                <div class="col-60">{{ order.item.name }}</div>
+                                <div class="col-20 color-green">{{ order.item.price }}</div>
+                            </div>
+                            {% if order.notes != None %}
+                                <i class="color-lightblue">{{ order.notes }}</i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
 
-                </div>
+            </div>
         {% endfor %}
 
 
-    <div class="content-block"><a href="payment.html" class="button bg-green color-white">Confirm</a></div>
+        <div class="content-block"><a class="button bg-green color-white checkout-confirm-button">Confirm</a></div>
 
 
     </div>

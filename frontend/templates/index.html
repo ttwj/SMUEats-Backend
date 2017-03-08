@@ -1,36 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load static %}
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="theme-color" content="#2196f3">
-    <title>Framework7 Material</title>
-    <link rel="stylesheet" href="{%  static 'css/framework7.material.css'  %}">
-    <link rel="stylesheet" href="{%  static 'css/framework7.material.colors.css'  %}">
-    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/material-icons.css">
-    <link rel="stylesheet" href="css/kitchen-sink.css">
-    <link rel="icon" href="img/icon.png">
-</head>
-<body>
+{% extends 'base.html' %}
 
-<div class="views">
-    <div class="view view-main">
-        <div class="page-content login-screen-content">
+{% block content %}
+    <div data-page="tabs-static" class="page toolbar-fixed">
+        <div class="navbar">
+        <div class="navbar-inner">
+            <div class="center" style="font-size:15px; font-weight: 400;"><p>Hello, {{ request.user.username }}!</p></div>
+
+            <div class="right"><a href="{% url 'frontend-logout' %}" class="open-panel link icon-only"><i class="icon material-icons">exit_to_app</i></a></div>
+
+        </div>
+    </div>
+
+
+<div class="page-content">
+
             <div class="login-screen-title">SMUEats</div>
             <div class="content-block"><a href="{% url 'frontend-order-index' %}" class="button button-big button-raised">Order</a></div>
             <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Deliver</a></div>
             <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Pending</a></div>
         </div>
-
     </div>
-</div>
-
-<script type="text/javascript" src="{% static 'js/framework7.js' %}"></script>
-<script type="text/javascript" src="{%  static 'js/smueats-login.js' %}></script>
-</body>
-</html>
+{% endblock %}

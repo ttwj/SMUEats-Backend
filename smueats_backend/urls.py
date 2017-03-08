@@ -13,16 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django import contrib
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
-
+from django.contrib.auth import views
 import frontend.urls
-import smu_sso.urls
+import sms_sso.urls
 from smueats_backend import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^frontend/', include(frontend.urls.urlpatterns)),
-    url(r'^smu_sso/', include(smu_sso.urls.urlpatterns)),
+    url(r'^sms_sso/', include(sms_sso.urls.urlpatterns)),
+
+
+
+
+
 ] + static(settings.STATIC_URL)

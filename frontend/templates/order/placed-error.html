@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div data-page="tabs-static" class="page toolbar-fixed">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left"><a href="{% url 'index' %}" class="back link icon-only"><i class="icon icon-back"></i></a>
+                </div>
+                <div class="center">Order</div>
+                <div class="right"><a href="{% url 'index' %}" class="back open-panel link icon-only"><i
+                        class="material-icons">home</i></a></div>
+
+
+            </div>
+        </div>
+
+
+        <div class="page-content">
+
+            <div class="login-screen-title">Order Couldn't be placed :(((</div>
+            <div class="content-block">Todo: Redirect to checkout</div>
+
+        </div>
+    </div>
+{% endblock %}

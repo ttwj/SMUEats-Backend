@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework', # Django REST framework
     #'guardian', # Django Guardian (Object/row level permissions)
-    'smu_sso',
+    'sms_sso',
     'frontend'
 ]
 
@@ -148,3 +148,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/frontend/login/'
+
+LOGIN_REDIRECT_URL = '/frontend/'

@@ -6,7 +6,7 @@ from django.db import transaction as dbtransaction
 from django.core.exceptions import ValidationError
 
 # This is a testing convenience. Do not directly reference the User type in code
-from smu_sso.backends import SSOUser
+from sms_sso.backends import SSOUser
 from django.contrib.auth.models import User
 
 from enum import Enum
@@ -158,7 +158,7 @@ class Order(models.Model):
         (WALLET, 'Stored value wallet'),
         (CASH, 'Cash on delivery')
     )
-    payment_method = models.SmallIntegerField(choices=method_choices)
+    payment_method = models.SmallIntegerField(choices=method_choices, default=0)
     
     # order creation
     # def create_order(self, *items):
@@ -241,7 +241,7 @@ class Order(models.Model):
         if unique_merchants > 1:
             raise ValidationError('Only zero or one unique merchant(s) allowed')
     
-    def save(self, *args, **kwargs):
+    def save(self, DEFAULT_TIMEOUT_LENGTH=dt.timedelta(hours=1), *args, **kwargs):
         # default value doesn't work; don't ask
         if self.timeout_by is None:
             self.timeout_by = self.time_placed + DEFAULT_TIMEOUT_LENGTH
