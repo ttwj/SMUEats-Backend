@@ -89,7 +89,7 @@ $$(document).on('pageInit', function() {
 
     console.log("hi");
 
-	Dom7('.menu-item-href-order').on('mousedown', function(e) {
+	Dom7('.menu-item-href-order').on('click', function(e) {
 
 
 		$$('#cart-item-name').html($$(this).attr('item-name'));
