@@ -2,6 +2,7 @@ from django.conf.urls import  url
 from django.contrib import auth
 
 from frontend.forms import LoginForm
+from frontend.views import register_init
 from . import views
 
 urlpatterns = [
@@ -16,5 +17,6 @@ urlpatterns = [
     url(r'^login/$', auth.views.login, {'template_name': 'auth/login.html', 'authentication_form': LoginForm},
         name='login'),
     url(r'^logout/$', auth.views.logout, {'next_page': '/frontend/login'}, name='frontend-logout'),
+    url(r'^register/$', register_init, name='register'),
 
 ]

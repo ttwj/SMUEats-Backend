@@ -12,10 +12,12 @@ from rest_framework.response import Response
 
 from api.models import Order, Merchant, MerchantLocation, MenuItem, OrderItem
 
+def register_init(request):
+    return render(request, "auth/register.html")
+
 
 @login_required
 def index(request):
-
     context = {}
     return render(request, "index.html", context)
 
@@ -68,11 +70,13 @@ def del_cart(request, cart_id):
         logging.exception("exception 3")
         return Response({'error': 'Dunno what happened'})
 
+
 @login_required
 def store_merchant_index(request, merchant_id):
     merchant = Merchant.objects.get(id=merchant_id)
     items = MenuItem.objects.filter(merchant=merchant)
     return render(request, "order/store.html", {'merchant': merchant, 'items': items})
+
 
 @login_required
 def checkout_index(request):
@@ -98,6 +102,7 @@ def checkout_index(request):
         logging.exception("exception @ checkout")
         return render(request, "order/checkout-view-cart.html")
 
+
 @login_required
 def list_merchants_index(request):
     locations = MerchantLocation.objects.all()
@@ -112,16 +117,17 @@ def list_merchants_index(request):
 
     return render(request, "order/index.html", context)
 
+
 @login_required
 def checkout_confirm_order(request):
-
     try:
         order = Order.objects.create(orderer=request.user, location=request.POST['location'])
         for idx, cart_item in enumerate(request.session['cart']):
             if cart_item is not None:
                 orderid = cart_item['item_id']
                 menu_item = MenuItem.objects.get(id=orderid)
-                order_item = OrderItem.objects.create(order=order, menu_item=menu_item, quantity=int(cart_item['quantity']), notes=cart_item['notes'])
+                order_item = OrderItem.objects.create(order=order, menu_item=menu_item,
+                                                      quantity=int(cart_item['quantity']), notes=cart_item['notes'])
         context = {
             'order': order
         }
@@ -133,6 +139,5 @@ def checkout_confirm_order(request):
 
     except:
         return render(request, "order/placed-error.html")
-
 
 

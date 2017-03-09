@@ -162,3 +162,4 @@ LOGIN_REDIRECT_URL = '/frontend/'
 SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
 SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
 SSO_SERVER = 'http://localhost:3000/sso/'
+

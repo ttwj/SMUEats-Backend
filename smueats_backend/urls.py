@@ -18,6 +18,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.contrib.auth import views
+from django.views.generic import RedirectView
+
 import frontend.urls
 import sms_sso.urls
 from simple_sso.sso_client.client import Client
@@ -32,9 +34,7 @@ urlpatterns = [
     url(r'^frontend/', include(frontend.urls.urlpatterns)),
     url(r'^sms_sso/', include(sms_sso.urls.urlpatterns)),
     url(r'^sso/', include(sso_client.get_urls())),
-
-
-
+    url(r'^', RedirectView.as_view(pattern_name='index', permanent=False)),
 
 
 ] + static(settings.STATIC_URL)
