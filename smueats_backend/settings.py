@@ -157,9 +157,15 @@ LOGIN_URL = '/frontend/login/'
 LOGIN_REDIRECT_URL = '/frontend/'
 
 
-#SSO Settings
+#SSO Settings (local dev)
 
-SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
-SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
+#SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
+#SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
+
+
+#SSO Settings (actual)
+SSO_PUBLIC_KEY = 'KcJrHlft2tl36uMYMwt27mV1e3Iqr6alqhZA6SxvUiZFosXpp6HXRq4GNkrgZl18'
+SSO_PRIVATE_KEY = 'uRXh8TeZMR5LdaEaE8e3U7An66i6h4B4TuOVlrgavIaVyReZKvcdyDsGKvNirMPk'
+
 SSO_SERVER = 'http://beta.beepbeep.rocks/sso/'
 

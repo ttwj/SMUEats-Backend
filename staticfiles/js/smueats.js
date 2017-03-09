@@ -122,7 +122,8 @@ function performLogin() {
                 }
 
             },
-            error: function (data) {
+            error: function (err) {
+                data = err.responseJSON;
                 if (data.error != undefined) {
                     showError(data.error);
                 }
