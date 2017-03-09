@@ -6,6 +6,9 @@ var smuEats = new Framework7({
 });
 
 
+smuEatsAddr = "http://smueats.beepbeep.rocks"
+beepbeepAddr = "http://beta.beepbeep.rocks"
+
 var isAndroid = Framework7.prototype.device.android === true;
 var isIos = Framework7.prototype.device.ios === true;
 
@@ -112,7 +115,7 @@ function performLogin() {
 
                 if (data.success == true) {
                     //logged in, now redirect to SSO
-                    window.location.href = 'http://localhost:8000/sso/'
+                    window.location.href = smuEatsAddr + '/sso/'
                 }
                 else {
                     showError('An unexpected error occured :(');
@@ -152,7 +155,7 @@ $$(document).on('pageInit', function () {
         $('.please-wait').show();
 
         $.ajax({
-            url: "http://localhost:3000/v1/account/register/init",
+            url: beepbeepAddr + "/v1/account/register/init",
             method: "POST",
             xhrFields: {
                 withCredentials: true
@@ -208,7 +211,7 @@ $$(document).on('pageInit', function () {
 
 
         $.ajax({
-            url: "http://localhost:3000/v1/account/register/confirm",
+            url: beepbeepAddr + "/v1/account/register/confirm",
             method: "POST",
             xhrFields: {
                 withCredentials: true
@@ -219,7 +222,7 @@ $$(document).on('pageInit', function () {
             },
             success: function (data) {
                 if (data.success == true) {
-                    window.location.href = "http://localhost:8000/sso/"
+                    window.location.href = smuEatsAddr + "/sso/"
                 }
                 else {
                     //wtf
@@ -252,7 +255,7 @@ $$(document).on('pageInit', function () {
         }
 
         $.ajax({
-            url: "http://localhost:3000/v1/account/register/verify",
+            url: beepbeepAddr + "/v1/account/register/verify",
             method: "POST",
             xhrFields: {
                 withCredentials: true
@@ -316,7 +319,7 @@ $$(document).on('pageInit', function () {
         if (!Number.isInteger(quantity) || quantity < 1) {
             quantity = 1;
         }
-        $.post("http://localhost:8000/frontend/order/add_cart/",
+        $.post(smuEatsAddr + "/frontend/order/add_cart/",
             {
                 'quantity': quantity,
                 'notes': $$('#cart-item-notes').val(),
@@ -358,7 +361,7 @@ $$(document).on('pageInit', function () {
         var item_id = $$(this).attr('cart-id');
         smuEats.confirm('Are you sure you want to delete this item?', function () {
 
-            $.getJSON("http://localhost:8000/frontend/order/del_cart/" + item_id + "/", function (data) {
+            $.getJSON(smuEatsAddr + "/frontend/order/del_cart/" + item_id + "/", function (data) {
                 if (data.total == undefined) {
                     //ugh oh error
                     smuEats.alert("Error: Could not delete item from cart?!    :((((");

@@ -26,7 +26,7 @@ SECRET_KEY = '24kxee@9ce&=c$nzy(gygz6!uz$%yj&z-8(0mwpq^$(26k5%p-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'devel-mrdrwll.c9users.io', '188.166.223.156', '192.168.1.224']
+ALLOWED_HOSTS = ['localhost', 'devel-mrdrwll.c9users.io', '188.166.223.156', '192.168.1.224', 'smueats.beepbeep.rocks']
 
 
 # Application definition
@@ -161,5 +161,5 @@ LOGIN_REDIRECT_URL = '/frontend/'
 
 SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
 SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
-SSO_SERVER = 'http://localhost:3000/sso/'
+SSO_SERVER = 'http://beta.beepbeep.rocks/sso/'
 
