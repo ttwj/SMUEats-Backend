@@ -167,5 +167,5 @@ LOGIN_REDIRECT_URL = '/frontend/'
 SSO_PUBLIC_KEY = 'KcJrHlft2tl36uMYMwt27mV1e3Iqr6alqhZA6SxvUiZFosXpp6HXRq4GNkrgZl18'
 SSO_PRIVATE_KEY = 'uRXh8TeZMR5LdaEaE8e3U7An66i6h4B4TuOVlrgavIaVyReZKvcdyDsGKvNirMPk'
 
-SSO_SERVER = 'http://beta.beepbeep.rocks/sso/'
+SSO_SERVER = 'https://beta.beepbeep.rocks/sso/'
 
