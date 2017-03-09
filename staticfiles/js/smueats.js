@@ -102,7 +102,7 @@ function performLogin() {
     }
     else {
         $.ajax({
-            url: "http://localhost:3000/v1/account/session_auth",
+            url: beepbeepAddr + "/v1/account/session_auth",
             method: "POST",
             xhrFields: {
                 withCredentials: true
