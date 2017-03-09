@@ -6,8 +6,8 @@ var smuEats = new Framework7({
 });
 
 
-smuEatsAddr = "http://smueats.beepbeep.rocks"
-beepbeepAddr = "http://beta.beepbeep.rocks"
+smuEatsAddr = "https://smueats.beepbeep.rocks"
+beepbeepAddr = "https://beta.beepbeep.rocks"
 
 var isAndroid = Framework7.prototype.device.android === true;
 var isIos = Framework7.prototype.device.ios === true;
