@@ -124,6 +124,7 @@ function performLogin() {
             },
             error: function (err) {
                 data = err.responseJSON;
+                 console.log(data);
                 if (data.error != undefined) {
                     showError(data.error);
                 }
@@ -153,7 +154,7 @@ $$(document).on('pageInit', function () {
         }
         console.log('clicked');
         $(this).hide();
-        $('.please-wait').show();
+        $('.please-wait-verify').show();
 
         $.ajax({
             url: beepbeepAddr + "/v1/account/register/init",
@@ -223,6 +224,8 @@ $$(document).on('pageInit', function () {
             },
             success: function (data) {
                 if (data.success == true) {
+                    $(this).hide();
+                    $('.please-wait-register').show();
                     window.location.href = smuEatsAddr + "/sso/"
                 }
                 else {
