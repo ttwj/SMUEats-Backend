@@ -17,7 +17,9 @@ def send_sms(user, message, get_number_user):
         'get_number_user': get_number_user.username,
         'password': "supersecurepassword1234",
     }
-    r = requests.post('http://localhost:3000/v1/sms', data=payload);
+    r = requests.post('http://localhost:3000/v1/sms', data=payload, headers={
+            'X-Webhook-Signature': 'wow'}
+    );
 
     jsonResponse = r.json()
     print(jsonResponse)
