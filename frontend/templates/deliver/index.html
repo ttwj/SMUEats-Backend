@@ -1,51 +1,57 @@
 {% extends 'base.html' %}
+{% load frontend_extras %}
+{% load cache %}
 {% block content %}
-<div data-page="tabs-static" class="page toolbar-fixed">
-    <div class="navbar bg-orange">
-        <div class="navbar-inner">
-             <div class="left"><a href="{% url 'index' %}" class="back link icon-only"><i class="icon icon-back"></i></a></div>
-            <div class="center">Order</div>
-              {% include 'home-button.html' %}
+    <div data-page="deliver-index" class="page">
+        <div class="navbar bg-orange">
+            <div class="navbar-inner">
+                <div class="left"><a href="{% url 'index' %}" class="back link icon-only"><i class="icon icon-back"></i></a>
+                </div>
+                <div class="center">Deliver</div>
+                {% include 'home-button.html' %}
 
 
+            </div>
         </div>
-    </div>
+        <div id="deliver-open-orders-wrapper">
+            <div class="page-content" id="deliver-open-orders">
 
-    {% include 'order/checkout-toolbar.html' %}
+                <div class="content-block-title">Open Orders</div>
+                <div class="list-block">
 
-    <div class="toolbar tabbar">
-        <div class="toolbar-inner">
+                    {% for order in orders %}
+                        {% cache 500 order_deliver_card order.id %}
+                        <div class="card">
+                            <a href="{% url 'frontend-deliver-details' order_id=order.id %}" style="ripple">
+                                <div style="" valign="bottom" class="card-header">
+                                    <div class="row" style="width:100%">
+                                        <div class="col-20">${{ order.items|items_total }}</div>
+                                        <div class="col-30">{{ order.unique_merchants }} store(s)</div>
+                                        <div class="col-30">{{ order.items.count }} order(s)</div>
 
-             {% for key, value in locations.items %}
-            <a href="#tab{{ forloop.counter }}" class="tab-link  {% if forloop.counter == 1 %}active{% endif %}">{{ key }}</a>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="tabs">
-
-        {% for location, merchants in locations.items %}
-            <div id="tab{{ forloop.counter }}" class="page-content tab {% if forloop.counter == 1 %}active{% endif %}">
-                <div class="content-block">
-
-
-                    {% for merchant in merchants %}
-                    <div class="card">
-                        <a href="{% url 'frontend-order-merchant-index' merchant_id=merchant.id %}" style="ripple">
-                            <div style="" valign="bottom" class="card-header">{{ merchant.name }}</div>
-                            <div class="card-content">
-                                <div class="card-content-inner">
-                                    <p class="color-green">{{ merchant.name }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+
+                                <div class="card-content">
+                                    <div class="card-content-inner">
+                                        Deliver to: <b>{{ order.location }}</b> by <span
+                                            class="color-orange"> {{ order.timeout_by }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        </div>
+                        {% endcache %}
                     {% endfor %}
+                <div class="page-conntent">
 
 
                 </div>
-            </div>
-            {% endfor %}
+                <script type="text/javascript">
+                    smuEats.hidePreloader();
 
+                </script>
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}

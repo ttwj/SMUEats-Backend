@@ -109,7 +109,7 @@ class Order(models.Model):
                 output_field=models.DecimalField())
         )['price_total'] or Decimal(0)
 
-    DEFAULT_TIMEOUT_LENGTH = dt.timedelta(hours=1)
+    DEFAULT_TIMEOUT_LENGTH = dt.timedelta(hours=0.5)
 
     # timestamps
     time_placed = models.DateTimeField(default=timezone.now)
@@ -142,7 +142,7 @@ class Order(models.Model):
             return self.Stage.PLACED
         else:
             assert False, 'if/elif fallthrough in stage property'
-    
+
     @property
     def unique_merchants(self):
         return self.items.aggregate(
@@ -158,7 +158,7 @@ class Order(models.Model):
         (WALLET, 'Stored value wallet'),
         (CASH, 'Cash on delivery')
     )
-    payment_method = models.SmallIntegerField(choices=method_choices, default=0)
+    payment_method = models.SmallIntegerField(choices=method_choices)
     
     # order creation
     # def create_order(self, *items):
@@ -201,6 +201,9 @@ class Order(models.Model):
         
         Possible concurrency problems here!!!!
         '''
+
+        if new_fulfiller == self.orderer:
+            raise ValueError('You cannot fufil your own order ~_~')
         now = timezone.now()
         if self.timeout_by < now:
             raise ValueError('This order has expired')
@@ -208,12 +211,14 @@ class Order(models.Model):
         with dbtransaction.atomic():
             # only one at a time
             if new_fulfiller.fulfilled_orders.select_for_update().filter(time_fulfilled__isnull=True).exists():
-                raise ValueError('Fulfil candidate has open order')
+                print("hi")
+                #raise ValueError("You've already committed to fulfil another order, please complete that first")
 
             if self.fulfiller is None:
                 self.fulfiller = new_fulfiller
             else:
-                raise ValueError('Order is already fulfilled')
+                print("hi")
+                #raise ValueError('Order is already fulfilled')
                 
             self.time_committed = now
             self.save()

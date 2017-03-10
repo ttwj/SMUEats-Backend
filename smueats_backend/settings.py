@@ -159,13 +159,56 @@ LOGIN_REDIRECT_URL = '/frontend/'
 
 #SSO Settings (local dev)
 
-#SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
-#SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
-
+SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
+SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
+SSO_SERVER = 'http://localhost:3000/sso/'
 
 #SSO Settings (actual)
-SSO_PUBLIC_KEY = 'KcJrHlft2tl36uMYMwt27mV1e3Iqr6alqhZA6SxvUiZFosXpp6HXRq4GNkrgZl18'
-SSO_PRIVATE_KEY = 'uRXh8TeZMR5LdaEaE8e3U7An66i6h4B4TuOVlrgavIaVyReZKvcdyDsGKvNirMPk'
+#SSO_PUBLIC_KEY = 'KcJrHlft2tl36uMYMwt27mV1e3Iqr6alqhZA6SxvUiZFosXpp6HXRq4GNkrgZl18'
+#SSO_PRIVATE_KEY = 'uRXh8TeZMR5LdaEaE8e3U7An66i6h4B4TuOVlrgavIaVyReZKvcdyDsGKvNirMPk'
 
-SSO_SERVER = 'https://beta.beepbeep.rocks/sso/'
+#SSO_SERVER = 'https://beta.beepbeep.rocks/sso/'
 
+USE_TZ = True
+TIME_ZONE = 'Asia/Singapore'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': [
+            os.environ.get('REDIS_URL')
+        ],
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'CONNECTION_POOL_CLASS_KWARGS': {
+                'max_connections': 50,
+                'timeout': 20,
+            },
+            'MAX_CONNECTIONS': 1000,
+            'PICKLE_VERSION': -1,
+        },
+    },
+}
+
+
+CACHEOPS_REDIS = os.environ.get('REDIS_URL')
+
+CACHEOPS_DEFAULTS = {
+    'timeout': 60*60
+}
+CACHEOPS = {
+    'auth.user': {'ops': 'get', 'timeout': 60*15},
+    'auth.*': {'ops': ('fetch', 'get')},
+    'auth.permission': {'ops': 'all'},
+    '*.*': {},
+}
+
+BROKER_URL = os.environ.get('REDIS_URL')
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE

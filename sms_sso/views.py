@@ -1,14 +1,12 @@
-import logging
-from django.contrib.auth import login
-from django.contrib.auth.backends import ModelBackend
 import json
-from django.shortcuts import render, redirect
+import logging
 
-# Create your views here.
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from frontend import views
+from frontend.views import order
 from sms_sso.backends import sso_authenticate
 
 
@@ -28,7 +26,7 @@ def sso(request, format=None):
                 login(request, sso_user.user)  # give da cookiez
                 print("we're logged in!")
                 # return Response("Logged in!")
-                return redirect(views.index)
+                return redirect(order.index)
             else:
                 return Response("Invalid username/password combination!")
     except:

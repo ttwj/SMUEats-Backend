@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div data-page="tabs-static" class="page toolbar-fixed">
+    <div data-page="preloader-index" class="page toolbar-fixed">
         <div class="navbar">
         <div class="navbar-inner">
             <div class="center" style="font-size:15px; font-weight: 400;"><p>Hello, {{ request.user.username }}!</p></div>
@@ -16,7 +16,7 @@
 
             <div class="login-screen-title">SMUEats</div>
             <div class="content-block"><a data-ignore-cache="true" data-force="true" href="{% url 'frontend-order-index' %}" class="button button-big button-raised">Order</a></div>
-            <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Deliver</a></div>
+            <div class="content-block"><a data-ignore-cache="true" data-force="true" href="{% url 'frontend-deliver-index' %}" class="button button-big button-raised preloader-button">Deliver</a></div>
             <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Pending</a></div>
         </div>
     </div>

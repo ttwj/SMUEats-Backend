@@ -1,3 +1,4 @@
+{% load frontend_extras %}
 <div data-page="store" class="page" id="checkout-page">
     <div class="navbar bg-green">
         <div class="navbar-inner">
@@ -21,32 +22,81 @@
 
     <div class="page-content">
 
-        <div class="content-block-title">Details</div>
+        <div class="content-block-title">Meetup Location:</div>
         <div class="list-block">
 
-       <form id="checkout-form" method="post" action="{% url 'checkout-confirm-order' %}">
+            <form id="checkout-form" method="post" action="{% url 'checkout-confirm-order' %}">
                 {% csrf_token %}
-            <ul>
-                <li>
-                    <div class="item-content">
-                        <div class="item-inner">
-                            <div class="item-title label">Meetup location:</div>
-                            <div class="item-input item-input-field">
-                                <textarea id="location" class="" name="location"></textarea>
-                            </div>
+
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-input item-input-field">
+                            <textarea id="location" class="" name="location" placeholder="Building 3 Level 3 Block 3"></textarea>
                         </div>
-                </li>
-            </ul>
+                    </div>
+                </div>
+
+                <div class="content-block-title">Deliver in (minutes) (min. 30 minutes)</div>
+
+                <div class="item-content">
+                    <div class="item-inner">
+
+                        <div class="item-input">
+                               <input id="checkout-deliver-minutes" type="number" name="minutes" placeholder="30">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="content-block-title">Payment</div>
+                <ul>
+
+
+                    <li>
+                        <label class="label-radio item-content">
+                            <!-- Checked by default -->
+                            <input type="radio" name="payment" value="wallet" checked="checked">
+                            <div class="item-media">
+                                <i class="icon icon-form-radio"></i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">Wallet: <span id="checkout-wallet-balance"><i><small>Checking balance..</small></i></span></div>
+                            </div>
+                        </label>
+                    </li>
+                    </li>
+                    <li>
+                        <label class="label-radio item-content">
+                            <!-- Checked by default -->
+                            <input type="radio" name="payment" value="cash">
+                            <div class="item-media">
+                                <i class="icon icon-form-radio"></i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">Cash on delivery</div>
+                            </div>
+                        </label>
+                    </li>
+                    </li>
+                </ul>
+            </form>
         </div>
 
 
-        <div class="content-block-title">Items <small><i>(Click to delete)</i></small></div>
+        <div class="content-block-title">Items
+            <small><i>(Click to delete)</i></small>
+        </div>
         <div class="card  bg-lightgreen">
-<div class="card-content"><div class="card-content-inner"><div class="row">
-                                <div class="col-20 color-white">Qty</div>
-                                <div class="col-60 color-white">Name</div>
-                                <div class="col-20 color-white">Price</div>
-                            </div></div></div>
+            <div class="card-content">
+                <div class="card-content-inner">
+                    <div class="row">
+                        <div class="col-10 color-white">Qty</div>
+                        <div class="col-40 color-white">Name</div>
+                        <div class="col-10 color-white">Price</div>
+                        <div class="col-10 color-white">Total</div>
+                    </div>
+                </div>
+            </div>
 
 
         </div>
@@ -56,9 +106,10 @@
                     <div class="card-content">
                         <div class="card-content-inner">
                             <div class="row">
-                                <div class="col-20 color-red"> {{ order.quantity }}</div>
-                                <div class="col-60">{{ order.item.name }}</div>
-                                <div class="col-20 color-green">{{ order.item.price }}</div>
+                                <div class="col-10 color-red"> {{ order.quantity }}</div>
+                                <div class="col-40">{{ order.item.name }}</div>
+                                <div class="col-10">{{ order.item.price }}</div>
+                                <div class="col-10 color-green">{{ order.item.price|multiply:order.quantity }}</div>
                             </div>
                             {% if order.notes != None %}
                                 <i class="color-lightblue">{{ order.notes }}</i>
@@ -70,6 +121,8 @@
             </div>
         {% endfor %}
 
+
+        <div id="checkout-total" class="checkout-total content-block-title">Subtotal: ${% if not request.session.total %}0.00{% else %}{{ request.session.total }}{% endif %}</div>
 
         <div class="content-block"><a class="button bg-green color-white checkout-confirm-button">Confirm</a></div>
 

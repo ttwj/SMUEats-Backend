@@ -2,12 +2,16 @@ var smuEats = new Framework7({
     modalTitle: 'SMUEats',
     // Enable Material theme
     material: true,
-    pushState: true
+    //pushState: true
 });
 
 
-smuEatsAddr = "https://smueats.beepbeep.rocks"
-beepbeepAddr = "https://beta.beepbeep.rocks"
+//smuEatsAddr = "https://smueats.beepbeep.rocks"
+//beepbeepAddr = "https://beta.beepbeep.rocks"
+
+smuEatsAddr = "http://localhost:8000"
+beepbeepAddr = "http://localhost:3000"
+
 
 var isAndroid = Framework7.prototype.device.android === true;
 var isIos = Framework7.prototype.device.ios === true;
@@ -50,6 +54,10 @@ $(document).ready(function () {
     $('.login-button').click(function () {
         performLogin();
     });
+    $('.preloader-button').click(function () {
+        smuEats.showPreloader('Loading..');
+    });
+
 
 
 })
@@ -96,11 +104,14 @@ function performLogin() {
     var username = $('#login-username').val();
     var password = $('#login-password').val();
 
+    console.log($('#login-username'))
+
     if (!username || !password) {
         //Your username and password didn't match. Please try again.
         showError("Please enter your username/password")
     }
     else {
+        console.log("doing ajax yo")
         $.ajax({
             url: beepbeepAddr + "/v1/account/session_auth",
             method: "POST",
@@ -115,6 +126,7 @@ function performLogin() {
 
                 if (data.success == true) {
                     //logged in, now redirect to SSO
+                    smuEats.showPreloader('Logging in..');
                     window.location.href = smuEatsAddr + '/sso/'
                 }
                 else {
@@ -124,7 +136,7 @@ function performLogin() {
             },
             error: function (err) {
                 data = err.responseJSON;
-                 console.log(data);
+                console.log(data);
                 if (data.error != undefined) {
                     showError(data.error);
                 }
@@ -139,7 +151,50 @@ function performLogin() {
     }
 }
 
-$$(document).on('pageInit', function () {
+var refresh_interval_id = -1;
+
+smuEats.onPageAfterAnimation('deliver-index', function () {
+    smuEats.hidePreloader();
+    smuEats.hidePreloader();
+    smuEats.hidePreloader();
+});
+
+
+smuEats.onPageBeforeAnimation('deliver-index', function () {
+    console.log('setting up refresh');
+    refresh_interval_id = setInterval(refreshPage, 18000);
+
+    function refreshPage() {
+        console.log("refreshing page!");
+        smuEats.showPreloader('Updating live orders..');
+        $('#deliver-open-orders-wrapper').load(smuEatsAddr + "/frontend/deliver/ #deliver-open-orders", function (response, status, xhr) {
+            console.log("response refresheds");
+            smuEats.hidePreloader();
+        });
+    }
+})
+
+smuEats.onPageBeforeAnimation('*', function(page) {
+    console.log("hello at page" + page.name)
+    if (page.name != 'deliver-index' && refresh_interval_id != 1) {
+        //we were previously @ deliver-index, stop the refresh
+         console.log('clearing refresh');
+        clearInterval(refresh_interval_id);
+        refresh_interval_id = -1;
+    }
+});
+
+
+smuEats.onPageBeforeRemove('deliver-index', function () {
+    console.log('clearing refresh');
+    clearInterval(refresh_interval_id);
+    refresh_interval_id = -1;
+})
+
+smuEats.onPageInit('*', function (page) {
+    $$('.preloader-button').on('click', function () {
+        smuEats.showPreloader('Loading..');
+    });
 
     /*registration*/
 
@@ -168,7 +223,7 @@ $$(document).on('pageInit', function () {
             success: function (data) {
                 console.log('hello');
                 console.log(data);
-                 smuEats.showTab('#registration-2');
+                smuEats.showTab('#registration-2');
                 if (data.success == true) {
                     smuEats.showTab('#registration-2');
                 }
@@ -201,6 +256,8 @@ $$(document).on('pageInit', function () {
         });
 
     });
+
+
 
     $$('#register-confirm-button').on('click', function () {
         var username = $('#register-username').val();
@@ -320,6 +377,7 @@ $$(document).on('pageInit', function () {
 
     Dom7('#cart-add-item').on('click', function (e) {
         var quantity = Number($$('#cart-item-quantity').val());
+
         if (!Number.isInteger(quantity) || quantity < 1) {
             quantity = 1;
         }
@@ -349,14 +407,17 @@ $$(document).on('pageInit', function () {
 
                     });
                 }, 100);
+                $$('#cart-item-notes').val('');
+                $$('#cart-item-quantity').val('1');
 
             }).fail(function (data) {
             smuEats.closeModal('.picker-modal-store');
             smuEats.alert("Error: Could not add item to cart?!    :((((");
+            $$('#cart-item-notes').val('');
+            $$('#cart-item-quantity').val('1');
 
         });
-        $$('#cart-item-notes').val('');
-        $$('#cart-item-quantity').val('1');
+
     });
 
 
@@ -398,6 +459,45 @@ $$(document).on('pageInit', function () {
 
         });
     });
+
+    $$('.deliver-confirm-button').on('click', function () {
+
+        var order_id = $('#checkout-total').attr('order-id');
+        if (!order_id || order_id < 1) {
+            smuEats.alert('An unexpected error occured!?! Could not find order ID :(');
+        }
+        $.ajax({
+            url: smuEatsAddr + "/frontend/deliver/fulfil/" + order_id + "/",
+            method: "GET",
+
+
+            success: function (data) {
+                if (data.success == true) {
+                    smuEats.alert("You've accepted this order! A confirmation SMS will be sent to you shortly.");
+                }
+                else {
+                    smuEats.alert('An unexpected error occured :(');
+                }
+
+            },
+            error: function (err) {
+                data = err.responseJSON;
+                console.log("error data" + data);
+
+                if (data.error != undefined) {
+                    smuEats.alert(data.error);
+                }
+                else {
+                    //wtf
+                    smuEats.alert('An unexpected error occured :(');
+                }
+
+            },
+        });
+
+    });
+
+
 
 
 });

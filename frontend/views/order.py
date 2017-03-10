@@ -2,15 +2,18 @@ import logging
 
 from decimal import Decimal
 
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 # Create your views here.
+from django.utils import timezone
 from django.views import generic
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.models import Order, Merchant, MerchantLocation, MenuItem, OrderItem
+
 
 def register_init(request):
     return render(request, "auth/register.html")
@@ -25,6 +28,7 @@ def index(request):
 @api_view(['POST'])
 @login_required
 def add_cart(request):
+    request.session.modified = True
     try:
         item_id = request.POST['item_id']
         item = MenuItem.objects.get(id=item_id)
@@ -35,12 +39,14 @@ def add_cart(request):
             'price': str(item.price)
         }
         if 'cart' in request.session:
+            print(request.session['cart'])
             total = Decimal(request.session['total'])
-            total += item.price
+            total += (item.price * int(request.POST['quantity']))
             request.session['total'] = str(total)
             request.session['cart'].append(cart_item)
         else:
-            request.session['total'] = str(item.price)
+            total = (item.price * int(request.POST['quantity']))
+            request.session['total'] = str(total)
             request.session['cart'] = [cart_item]
 
         print({'total': str(request.session['total'])})
@@ -54,12 +60,13 @@ def add_cart(request):
 @api_view(['GET'])
 @login_required
 def del_cart(request, cart_id):
+    request.session.modified = True
     try:
         if 'cart' in request.session:
             item = request.session['cart'][int(cart_id)]
             print(item)
             total = Decimal(request.session['total'])
-            total -= Decimal(item['price'])
+            total -= (Decimal(item['price']) * int(item['quantity']))
             request.session['total'] = str(total)
             request.session['cart'][int(cart_id)] = None
 
@@ -121,7 +128,14 @@ def list_merchants_index(request):
 @login_required
 def checkout_confirm_order(request):
     try:
-        order = Order.objects.create(orderer=request.user, location=request.POST['location'])
+        payment_method = Order.WALLET
+        if request.POST['payment'] == 'cash':
+            payment_method = Order.CASH
+        order = Order.objects.create(orderer=request.user, location=request.POST['location'],
+                                     payment_method=payment_method,
+                                     timeout_by=timezone.now() + datetime.timedelta(
+                                         minutes=int(request.POST['minutes'])))
+
         for idx, cart_item in enumerate(request.session['cart']):
             if cart_item is not None:
                 orderid = cart_item['item_id']
@@ -132,12 +146,15 @@ def checkout_confirm_order(request):
             'order': order
         }
         print(order)
-        request.session['cart'] = None
-        request.session['total'] = None
+        del request.session['cart']
+        del request.session['total']
         return render(request, "order/placed-success.html", context)
 
 
-    except:
+
+
+
+    except Exception as e:
+        print("Error in ordering")
+        print(e)
         return render(request, "order/placed-error.html")
-
-
