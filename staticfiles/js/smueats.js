@@ -19,11 +19,11 @@ if (typeof localStorage === 'object') {
 }
 
 
-//smuEatsAddr = "https://smueats.beepbeep.rocks"
-//beepbeepAddr = "https://beta.beepbeep.rocks"
+smuEatsAddr = "https://smueats.beepbeep.rocks"
+beepbeepAddr = "https://beta.beepbeep.rocks"
 
-smuEatsAddr = "http://localhost:8000"
-beepbeepAddr = "http://localhost:3000"
+//smuEatsAddr = "http://localhost:8000"
+//beepbeepAddr = "http://localhost:3000"
 
 
 var isAndroid = Framework7.prototype.device.android === true;
