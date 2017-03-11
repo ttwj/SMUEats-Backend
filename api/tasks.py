@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 
 logger = get_task_logger(__name__)
 
+BB_SERVER = "https://beta.beepbeep.rocks"
 
 def create_escrow(order, api_auth_token, pay_cash=False):
     if pay_cash:
@@ -21,7 +22,7 @@ def create_escrow(order, api_auth_token, pay_cash=False):
 
     r = perform_webhook_with_headers({
         'amount': amount
-    }, "http://localhost:3000/v1/webhooks/create_escrow", {'Authorization': 'Token ' + api_auth_token})
+    }, BB_SERVER + "/v1/webhooks/create_escrow", {'Authorization': 'Token ' + api_auth_token})
 
     jsonResponse = r.json()
     print(jsonResponse)
@@ -40,7 +41,7 @@ def create_escrow(order, api_auth_token, pay_cash=False):
 def perform_escrow(order):
     r = perform_webhook({
         'escrow_uuid': str(order.escrow_uuid),
-    }, "http://localhost:3000/v1/webhooks/perform_escrow")
+    }, BB_SERVER + "/v1/webhooks/perform_escrow")
 
     jsonResponse = r.json()
     print(jsonResponse)
@@ -92,7 +93,7 @@ def update_escrow_with_token(order):
         'token_user': order.fulfiller.username,
         'referrer': 'SMUEats',
         'referrer_data': json.dumps(referrer_data),
-    }, "http://localhost:3000/v1/webhooks/update_escrow")
+    }, BB_SERVER + "/v1/webhooks/update_escrow")
 
     jsonResponse = r.json()
     print(jsonResponse)
@@ -155,7 +156,7 @@ def send_sms(user_id, message, get_number_user_id):
     json_str = json.dumps(payload)
     signature = generate_webhook_signature(json_str)
     print("signature " + signature)
-    r = requests.post('http://localhost:3000/v1/webhooks/sms', data={'json': json_str}, headers={
+    r = requests.post(BB_SERVER + '/v1/webhooks/sms', data={'json': json_str}, headers={
         'X-Webhook-Signature': signature
     });
 

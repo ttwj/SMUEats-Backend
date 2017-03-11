@@ -159,15 +159,15 @@ LOGIN_REDIRECT_URL = '/frontend/'
 
 #SSO Settings (local dev)
 
-SSO_PUBLIC_KEY = 'WV9hrc5KPE3CMflryjUWn9t91DumyEYHB890jOiqzCCMpadqcU9HDkHnbsih1EeS'
-SSO_PRIVATE_KEY = 't5MdVezuzV4gQqCO8s52MPHCwDgOR2VW3BaU24wEDp2qqy0bF9kNBHlEw9hKegEn'
-SSO_SERVER = 'http://localhost:3000/sso/'
+#SSO_PUBLIC_KEY = 'WV9hrc5KPE3CMflryjUWn9t91DumyEYHB890jOiqzCCMpadqcU9HDkHnbsih1EeS'
+#SSO_PRIVATE_KEY = 't5MdVezuzV4gQqCO8s52MPHCwDgOR2VW3BaU24wEDp2qqy0bF9kNBHlEw9hKegEn'
+#SSO_SERVER = 'http://localhost:3000/sso/'
 
 #SSO Settings (actual)
-#SSO_PUBLIC_KEY = 'KcJrHlft2tl36uMYMwt27mV1e3Iqr6alqhZA6SxvUiZFosXpp6HXRq4GNkrgZl18'
-#SSO_PRIVATE_KEY = 'uRXh8TeZMR5LdaEaE8e3U7An66i6h4B4TuOVlrgavIaVyReZKvcdyDsGKvNirMPk'
+SSO_PUBLIC_KEY = 'KcJrHlft2tl36uMYMwt27mV1e3Iqr6alqhZA6SxvUiZFosXpp6HXRq4GNkrgZl18'
+SSO_PRIVATE_KEY = 'uRXh8TeZMR5LdaEaE8e3U7An66i6h4B4TuOVlrgavIaVyReZKvcdyDsGKvNirMPk'
 
-#SSO_SERVER = 'https://beta.beepbeep.rocks/sso/'
+SSO_SERVER = 'https://beta.beepbeep.rocks/sso/'
 
 USE_TZ = True
 TIME_ZONE = 'Asia/Singapore'
