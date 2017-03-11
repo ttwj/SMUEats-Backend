@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     #'guardian', # Django Guardian (Object/row level permissions)
     'sms_sso',
     'simple_sso',
-    'frontend'
+    'frontend',
 ]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
@@ -159,8 +159,8 @@ LOGIN_REDIRECT_URL = '/frontend/'
 
 #SSO Settings (local dev)
 
-SSO_PUBLIC_KEY = 'CXT8m3snUpnrnSfliA9ofHhRa0dXx7TJzJXGualtH2hqSd2Qlr2ZI6h4XLeNjA3T'
-SSO_PRIVATE_KEY = 'BNFlumtvNIPHfZxS8lmICkg5mP8LcpwZ6OiXXw3K9TkuLjdf1XqVCNUjbW1oz25x'
+SSO_PUBLIC_KEY = 'WV9hrc5KPE3CMflryjUWn9t91DumyEYHB890jOiqzCCMpadqcU9HDkHnbsih1EeS'
+SSO_PRIVATE_KEY = 't5MdVezuzV4gQqCO8s52MPHCwDgOR2VW3BaU24wEDp2qqy0bF9kNBHlEw9hKegEn'
 SSO_SERVER = 'http://localhost:3000/sso/'
 
 #SSO Settings (actual)

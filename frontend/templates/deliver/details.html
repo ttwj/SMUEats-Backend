@@ -9,7 +9,8 @@
     </div>
     <div class="toolbar tabbar bg-orange color-white">
         <div class="toolbar-inner">
-            <div class="tab-title" id="checkout-total" order-id="{{ order.id }}" class="checkout-total ripple">Total: ${{ order.items|items_total }}</div>
+            <div class="tab-title" id="checkout-total" order-id="{{ order.id }}" class="checkout-total ripple">Total:
+                ${{ order.items|items_total }}</div>
             <div class="tab-title">
                 <a class="button bg-white color-orange deliver-confirm-button">Accept</a>
             </div>
@@ -29,13 +30,14 @@
                     <div class="item-content">
                         <div class="item-inner">
                             <div class="item-title label">Meetup location:</div>
-                           <div class="item-input item-input-field">
-                                <textarea id="location" class="" name="location" readonly>{{ order.location }}</textarea>
+                            <div class="item-input item-input-field">
+                                <textarea id="location" class="" name="location"
+                                          readonly>{{ order.location }}</textarea>
                             </div>
                         </div>
                 </li>
                 <li>
-                     <div class="content-block-title color-red">Deliver by {{ order.timeout_by }}</div>
+                    <div class="content-block-title color-red">Deliver by {{ order.timeout_by }}</div>
                     {% if order.payment_method == 2 %}
                         <div class="content-block-title">Cash on delivery</div>
                     {% endif %}
@@ -49,9 +51,10 @@
             <div class="card-content">
                 <div class="card-content-inner">
                     <div class="row">
-                        <div class="col-20 color-white">Qty</div>
-                        <div class="col-60 color-white">Name</div>
-                        <div class="col-20 color-white">Price</div>
+                        <div class="col-10 color-white">Qty</div>
+                        <div class="col-40 color-white">Name</div>
+                        <div class="col-10 color-white">Price</div>
+                        <div class="col-10 color-white">Total</div>
                     </div>
                 </div>
             </div>
@@ -59,30 +62,34 @@
 
         </div>
         {% for merchant, order_items in order_items_grouped.items %}
-              <div class="content-block-title">{{ merchant }}</div>
-        {% for order_item in order_items %}
-            <div class="card">
-                <a href="#" class="ripple menu-item-href" >
-                    <div class="card-content">
-                        <div class="card-content-inner">
-                            <div class="row">
-                                <div class="col-20 color-red"> {{ order_item.quantity }}</div>
-                                <div class="col-60">{{ order_item.menu_item.name }}</div>
-                                <div class="col-20 color-orange">{{ order_item.menu_item.price }}</div>
+            <div class="content-block-title">{{ merchant }}</div>
+            {% for order_item in order_items %}
+                <div class="card">
+                    <a href="#" class="ripple menu-item-href">
+                        <div class="card-content">
+                            <div class="card-content-inner">
+                                <div class="row">
+
+                                    <div class="col-10 color-red"> {{ order_item.quantity }}</div>
+                                    <div class="col-40">{{ order_item.menu_item.name }}</div>
+                                    <div class="col-10">{{ order_item.menu_item.price }}</div>
+                                    <div class="col-10 color-green">{{ order_item.menu_item.price|multiply:order_item.quantity }}</div>
+
+                                </div>
+                                {% if order_item.notes != None %}
+                                    <i class="color-lightblue">{{ order_item.notes }}</i>
+                                {% endif %}
                             </div>
-                            {% if order_item.notes != None %}
-                                <i class="color-lightblue">{{ order_item.notes }}</i>
-                            {% endif %}
                         </div>
-                    </div>
-                </a>
+                    </a>
 
-            </div>
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
 
 
-        <div class="content-block"><a class="button bg-orange color-white deliver-confirm-button" style="padding-top: 5px; padding-bottom:40px;">Accept this order</a></div>
+        <div class="content-block"><a class="button bg-orange color-white deliver-confirm-button"
+                                      style="padding-top: 5px; padding-bottom:40px;">Accept this order</a></div>
 
 
     </div>

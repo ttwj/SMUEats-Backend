@@ -1,5 +1,5 @@
 {% load frontend_extras %}
-<div data-page="store" class="page" id="checkout-page">
+<div data-page="checkout-view-cart" class="page" id="checkout-page">
     <div class="navbar bg-green">
         <div class="navbar-inner">
 
@@ -10,7 +10,7 @@
     </div>
     <div class="toolbar tabbar bg-green color-white">
         <div class="toolbar-inner">
-            <div class="tab-title" id="checkout-total" class="checkout-total ripple">Total: ${% if not request.session.total %}0.00{% else %}{{ request.session.total }}{% endif %}</div>
+            <div class="tab-title" id="checkout-total" total="{{ request.session.total }}" class="checkout-total ripple">Total: ${% if not request.session.total %}0.00{% else %}{{ request.session.total }}{% endif %}</div>
             <div class="tab-title">
                 <a class="button bg-white color-green checkout-confirm-button">Confirm</a>
             </div>
@@ -25,7 +25,7 @@
         <div class="content-block-title">Meetup Location:</div>
         <div class="list-block">
 
-            <form id="checkout-form" method="post" action="{% url 'checkout-confirm-order' %}">
+            <form id="checkout-form" method="post">
                 {% csrf_token %}
 
                 <div class="item-content">
@@ -55,12 +55,12 @@
                     <li>
                         <label class="label-radio item-content">
                             <!-- Checked by default -->
-                            <input type="radio" name="payment" value="wallet" checked="checked">
+                            <input id="wallet-payment-radio" type="radio" name="payment" value="wallet" checked="checked">
                             <div class="item-media">
                                 <i class="icon icon-form-radio"></i>
                             </div>
                             <div class="item-inner">
-                                <div class="item-title">Wallet: <span id="checkout-wallet-balance"><i><small>Checking balance..</small></i></span></div>
+                                <div class="item-title">Wallet: <span class="checkout-wallet-balance"><i><small>Checking balance..</small></i></span></div>
                             </div>
                         </label>
                     </li>

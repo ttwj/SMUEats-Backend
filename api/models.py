@@ -117,6 +117,11 @@ class Order(models.Model):
     time_committed = models.DateTimeField(null=True, blank=True)
     time_fulfilled = models.DateTimeField(null=True, blank=True)
     is_paid = models.BooleanField(default=False)
+
+    #escrow ID on BeeepBeep's only set after setting up the escrow transaction
+    escrow_uuid = models.UUIDField(null=True, blank=True, editable=False, unique=True)
+    token = models.IntegerField(null=True, blank=True)
+
     
     class Stage(Enum):
         PLACED = 1
@@ -232,6 +237,7 @@ class Order(models.Model):
         
         assert self.time_fulfilled is None, 'time fulfilled is not none (stage check should have caught this)'
         self.time_fulfilled = timezone.now()
+        self.save()
         
         return
     
@@ -243,8 +249,8 @@ class Order(models.Model):
         # TODO make a foreign key that links here, trigger the clean check
         unique_merchants = self.unique_merchants
         assert unique_merchants >= 0, 'Negative merchants?'
-        if unique_merchants > 1:
-            raise ValidationError('Only zero or one unique merchant(s) allowed')
+        #if unique_merchants > 1:
+        #    raise ValidationError('Only zero or one unique merchant(s) allowed')
     
     def save(self, DEFAULT_TIMEOUT_LENGTH=dt.timedelta(hours=1), *args, **kwargs):
         # default value doesn't work; don't ask

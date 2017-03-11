@@ -3,21 +3,141 @@
 {% block content %}
     <div data-page="preloader-index" class="page toolbar-fixed">
         <div class="navbar">
-        <div class="navbar-inner">
-            <div class="center" style="font-size:15px; font-weight: 400;"><p>Hello, {{ request.user.username }}!</p></div>
+            <div class="navbar-inner">
+                <div class="center" style="font-size:15px; font-weight: 400;"><p>Hello, {{ request.user.username }}! Wallet: <span class="checkout-wallet-balance"><i><small>Checking balance..</small></i></span></p>
+                </div>
 
-            <div class="right"><a href="{% url 'frontend-logout' %}" class="external open-panel link icon-only"><i class="icon material-icons">exit_to_app</i></a></div>
+                <div class="right"><a href="{% url 'frontend-logout' %}" class="external open-panel link icon-only"><i
+                        class="icon material-icons">exit_to_app</i></a></div>
 
+            </div>
         </div>
-    </div>
 
 
-<div class="page-content">
+        <div class="page-content">
 
             <div class="login-screen-title">SMUEats</div>
-            <div class="content-block"><a data-ignore-cache="true" data-force="true" href="{% url 'frontend-order-index' %}" class="button button-big button-raised">Order</a></div>
-            <div class="content-block"><a data-ignore-cache="true" data-force="true" href="{% url 'frontend-deliver-index' %}" class="button button-big button-raised preloader-button">Deliver</a></div>
-            <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Pending</a></div>
+
+            {% if hasorder and order.token %}
+                <div class="content-block bg-lightgreen">
+                    <br/>
+                    <div class="login-screen-title color-white" style="font-size: 20px;">Got your order? Pass this code
+                        to the fulfiller
+                    </div>
+                    <div class="login-screen-title color-red">{{ order.token }}</div>
+                </div>
+            {% endif %}
+
+            {% if hasfulfil %}
+                <div class="content-block bg-orange">
+                    <br/>
+                    <div class="login-screen-title color-white" style="font-size: 20px;">Completed delivery? Get the 5 digit code from the orderer</div>
+               <br/> <a class="button bg-white color-orange deliver-completed-code"
+                                      style="padding-top: 5px; padding-bottom:40px;">Enter Code</a>
+                <br/>
+                </div>
+            {% endif %}
+
+            {% if hasorder or hasfulfil %}
+                <div class="login-screen-title color-green" style="font-size: 20px;">You have a pending
+                    {% if hasorder %}order{% else %}fulfilment{% endif %}
+                </div>
+                <div class="order-details">
+                    <div class="content-block-title">Order Stages</div>
+                    <div class="content-block">
+                        {% if hasorder %}
+                            <ul>
+                                <li><b>PLACED:</b> Order placed, pending acceptance</li>
+                                <li><b>COMMITTED:</b> Order is accepted and on it's way!</li>
+                                <li><b>TIMEOUT:</b> Order has expired, since no one accepted it within 30 minutes of its
+                                    placement
+                                </li>
+                            </ul>
+                        {% else %}
+                            <ul>
+                                <li><b>PLACED:</b> Order placed, pending acceptance</li>
+                                <li><b>COMMITTED:</b> Order has been accepted by you and is pending delivery</li>
+                                <li><b>TIMEOUT:</b> Order has expired, since no one accepted it within 30 minutes of its
+                                    placement
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="content-block-title color-green">Order Status: {{ stage }}</div>
+                    <div class="list-block">
+
+                        <ul>
+                            <li>
+                                <div class="item-content">
+                                    <div class="item-inner">
+                                        <div class="item-title label">Meetup location:</div>
+                                        <div class="item-input item-input-field">
+                                            <textarea id="location" class="" name="location"
+                                                      readonly>{{ order.location }}</textarea>
+                                        </div>
+                                    </div>
+                            </li>
+                            <li>
+                                <div class="content-block-title color-red">Deliver by {{ order.timeout_by }}</div>
+                                {% if order.payment_method == 2 %}
+                                    <div class="content-block-title">Cash on delivery</div>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="content-block-title">Items</div>
+                    <div class="card bg-orange">
+                        <div class="card-content">
+                            <div class="card-content-inner">
+                                <div class="row">
+                                    <div class="col-10 color-white">Qty</div>
+                                    <div class="col-40 color-white">Name</div>
+                                    <div class="col-10 color-white">Price</div>
+                                    <div class="col-10 color-white">Total</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    {% for merchant, order_items in order_items_grouped.items %}
+                        <div class="content-block-title">{{ merchant }}</div>
+                        {% for order_item in order_items %}
+                            <div class="card">
+                                <a href="#" class="ripple menu-item-href">
+                                    <div class="card-content">
+                                        <div class="card-content-inner">
+                                            <div class="row">
+
+                                                <div class="col-10 color-red"> {{ order_item.quantity }}</div>
+                                                <div class="col-40">{{ order_item.menu_item.name }}</div>
+                                                <div class="col-10">{{ order_item.menu_item.price }}</div>
+                                                <div class="col-10 color-green">{{ order_item.menu_item.price|multiply:order_item.quantity }}</div>
+                                            </div>
+                                            {% if order_item.notes != None %}
+                                                <i class="color-lightblue">{{ order_item.notes }}</i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+
+                </div>
+            {% else %}
+                <div class="content-block"><a data-ignore-cache="true" data-force="true"
+                                              href="{% url 'frontend-order-index' %}"
+                                              class="button button-big button-raised">Order</a></div>
+                <div class="content-block"><a data-ignore-cache="true" data-force="true"
+                                              href="{% url 'frontend-deliver-index' %}"
+                                              class="button button-big button-raised preloader-button">Deliver</a></div>
+                <!-- <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Pending</a></div>-->
+            {% endif %}
         </div>
     </div>
 {% endblock %}

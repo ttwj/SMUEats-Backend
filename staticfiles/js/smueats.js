@@ -6,6 +6,19 @@ var smuEats = new Framework7({
 });
 
 
+if (typeof localStorage === 'object') {
+    try {
+        localStorage.setItem('localStorage', 1);
+        localStorage.removeItem('localStorage');
+    } catch (e) {
+        Storage.prototype._setItem = Storage.prototype.setItem;
+        Storage.prototype.setItem = function () {
+        };
+        alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
+    }
+}
+
+
 //smuEatsAddr = "https://smueats.beepbeep.rocks"
 //beepbeepAddr = "https://beta.beepbeep.rocks"
 
@@ -49,6 +62,7 @@ function sleep(ms) {
 
 
 $(document).ready(function () {
+    getWallet();
 
     //for some strange reason Dom7 doesn't want to work here o_O
     $('.login-button').click(function () {
@@ -58,6 +72,52 @@ $(document).ready(function () {
         smuEats.showPreloader('Loading..');
     });
 
+    $('.deliver-completed-code').click(function () {
+
+        smuEats.prompt('Enter Code', 'Order Confirmation',
+            function (value) {
+
+                if (!value || value.length != 5) {
+                    smuEats.alert('Invalid token, please try again')
+                    return;
+                }
+
+                $.ajax({
+                    url: smuEatsAddr + "/frontend/deliver/complete",
+                    method: "POST",
+                    data: {
+                        'token': value,
+                    },
+
+                    success: function (data) {
+                        if (data.success == true) {
+                            smuEats.alert("Your order has been completed! A confirmation SMS will be sent to you shortly", function () {
+                                window.location.href = smuEatsAddr;
+                            });
+                        }
+                        else {
+                            smuEats.alert('An unexpected error occured :(');
+                        }
+
+                    },
+                    error: function (err) {
+                        data = err.responseJSON;
+                        console.log("error data" + data);
+
+                        if (data.error != undefined) {
+                            smuEats.alert(data.error);
+                        }
+                        else {
+                            //wtf
+                            smuEats.alert('An unexpected error occured :(');
+                        }
+
+                    },
+                });
+
+            }
+        );
+    });
 
 
 })
@@ -127,7 +187,41 @@ function performLogin() {
                 if (data.success == true) {
                     //logged in, now redirect to SSO
                     smuEats.showPreloader('Logging in..');
-                    window.location.href = smuEatsAddr + '/sso/'
+
+                    $.ajax({
+                        url: beepbeepAddr + "/v1/sso-token",
+                        method: "GET",
+                        xhrFields: {
+                            withCredentials: true
+                        },
+
+                        success: function (data) {
+                            if (data.token != undefined) {
+                                console.log("sso token ok")
+                                console.log(data);
+                                localStorage.setItem("bb-sso-token", data.token);
+                                window.location.href = smuEatsAddr + '/sso/'
+                            }
+                            else {
+                                showError('Could not obtain API token :(');
+                            }
+                        },
+                        error: function (err) {
+                            data = err.responseJSON;
+                            console.log(data);
+                            if (data.error != undefined) {
+                                showError(data.error);
+                            }
+                            else {
+                                //wtf
+                                showError('An unexpected error occured :(');
+                            }
+
+
+                        }
+                    });
+
+
                 }
                 else {
                     showError('An unexpected error occured :(');
@@ -164,6 +258,9 @@ smuEats.onPageBeforeAnimation('deliver-index', function () {
     console.log('setting up refresh');
     refresh_interval_id = setInterval(refreshPage, 18000);
 
+    console.log("sso token " + localStorage.getItem("bb-sso-token"))
+
+
     function refreshPage() {
         console.log("refreshing page!");
         smuEats.showPreloader('Updating live orders..');
@@ -174,11 +271,51 @@ smuEats.onPageBeforeAnimation('deliver-index', function () {
     }
 })
 
-smuEats.onPageBeforeAnimation('*', function(page) {
+var primary_wallet_balance = 0.00
+
+function getWallet(){
+     $.ajax({
+        url: beepbeepAddr + "/v1/account",
+        method: "GET",
+        xhrFields: {
+            withCredentials: true
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Token ' + localStorage.getItem("bb-sso-token"));
+        },
+        success: function (data) {
+            console.log("obtained wallet balance")
+            primary_wallet = data[0];
+
+            if (primary_wallet != undefined) {
+                primary_wallet_balance = primary_wallet.balance;
+                $$('.checkout-wallet-balance').html('$' + primary_wallet.balance)
+
+            }
+
+            else {
+                //wtf
+                smuEats.alert('An unexpected error occured :(');
+                $('#register-init-button').show();
+                $('.please-wait').hide();
+            }
+        },
+
+    });
+}
+
+smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
+    //obtain wallet balance
+    getWallet();
+
+
+});
+
+smuEats.onPageBeforeAnimation('*', function (page) {
     console.log("hello at page" + page.name)
     if (page.name != 'deliver-index' && refresh_interval_id != 1) {
         //we were previously @ deliver-index, stop the refresh
-         console.log('clearing refresh');
+        console.log('clearing refresh');
         clearInterval(refresh_interval_id);
         refresh_interval_id = -1;
     }
@@ -256,7 +393,6 @@ smuEats.onPageInit('*', function (page) {
         });
 
     });
-
 
 
     $$('#register-confirm-button').on('click', function () {
@@ -353,16 +489,6 @@ smuEats.onPageInit('*', function (page) {
     });
 
 
-    $$('.checkout-confirm-button').on('click', function () {
-        var location = $$('#location').val();
-        if (!location) {
-            smuEats.alert('Please enter a location!');
-            return;
-        }
-        $$('#checkout-form').submit();
-    });
-
-
     console.log("hi");
 
     Dom7('.menu-item-href-order').on('click', function (e) {
@@ -447,7 +573,7 @@ smuEats.onPageInit('*', function (page) {
                  */
 
                 $$('#checkout-total').html('Total: $' + data.total);
-                $$('.checkout-total').html('Total: $' + data.total);
+                $$('#checkout-total').attr('total', data.total);
                 item.hide();
             }).fail(function (data) {
                 if (data.total == undefined) {
@@ -460,6 +586,97 @@ smuEats.onPageInit('*', function (page) {
         });
     });
 
+
+    $$('.checkout-confirm-button').on('click', function () {
+
+
+        //verification checks
+        var total = $$('#checkout-total').attr('total');
+        console.log(total);
+        console.log(primary_wallet_balance);
+
+        console.log(($('#wallet-payment-radio').is(":checked")))
+
+        if (primary_wallet_balance == undefined) {
+            smuEats.alert('Please wait, checking your wallet balance..');
+            return
+        }
+        else if ((Number(total) > Number(primary_wallet_balance)) && ($('#wallet-payment-radio').is(":checked"))) {
+            smuEats.alert('You do not have sufficient balance in your wallet! :(');
+            return;
+        }
+        var location = $$('#location').val();
+        if (!location) {
+            smuEats.alert('Please enter a location!');
+            return;
+        }
+        var time = $$('#checkout-deliver-minutes').val();
+        if (!time) {
+            smuEats.alert('Please enter a valid time!');
+            return;
+        }
+        else if (time < 30) {
+            smuEats.alert('Min. waiting time is 30 minutes');
+            return;
+        }
+
+
+        var data = $("#checkout-form input").serializeArray();
+        data.push({
+            'name': 'location',
+            'value': location,
+
+
+        })
+        data.push({
+            'name': 'bb-sso-token',
+            'value': localStorage.getItem("bb-sso-token")
+        })
+
+        console.log('data ')
+        console.log(data)
+
+        smuEats.showPreloader('Sending order..')
+
+        $.ajax({
+            url: smuEatsAddr + "/frontend/order/checkout/confirm",
+            method: "POST",
+            data: $.param(data),
+            success: function (data) {
+                smuEats.hidePreloader();
+                if (data.success == true) {
+                    smuEats.alert("Your order has been placed! A confirmation SMS will be sent to you shortly", function () {
+                        window.location.href = smuEatsAddr;
+                    });
+
+                }
+                else {
+                    smuEats.alert('An unexpected error occured :(');
+                }
+
+            },
+            error: function (err) {
+                smuEats.hidePreloader();
+                data = err.responseJSON;
+                console.log("error data" + data);
+
+                if (data.error != undefined) {
+                    smuEats.alert(data.error);
+                }
+                else {
+                    //wtf
+                    smuEats.alert('An unexpected error occured :(');
+                }
+
+            }, statusCode: {
+                500: function () {
+                    smuEats.hidePreloader();
+                    smuEats.alert('An unexpected error occured :(');
+                }
+            }
+        });
+
+    });
     $$('.deliver-confirm-button').on('click', function () {
 
         var order_id = $('#checkout-total').attr('order-id');
@@ -468,12 +685,16 @@ smuEats.onPageInit('*', function (page) {
         }
         $.ajax({
             url: smuEatsAddr + "/frontend/deliver/fulfil/" + order_id + "/",
-            method: "GET",
-
+            method: "POST",
+            data: {
+                'bb-sso-token': localStorage.getItem("bb-sso-token")
+            },
 
             success: function (data) {
                 if (data.success == true) {
-                    smuEats.alert("You've accepted this order! A confirmation SMS will be sent to you shortly.");
+                    smuEats.alert("You've accepted this order! A confirmation SMS will be sent to you shortly.", function () {
+                        window.location.href = smuEatsAddr;
+                    });
                 }
                 else {
                     smuEats.alert('An unexpected error occured :(');
@@ -496,8 +717,6 @@ smuEats.onPageInit('*', function (page) {
         });
 
     });
-
-
 
 
 });

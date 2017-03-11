@@ -21,6 +21,7 @@ urlpatterns = [
 
     url(r'^deliver/$', deliver.deliver_index, name='frontend-deliver-index'),
     url(r'^deliver/details/(?P<order_id>\d+)/$', deliver.deliver_order_details, name='frontend-deliver-details'),
-    url(r'^deliver/fulfil/(?P<order_id>\d+)/$', deliver.fulfil_order, name='frontend-fulfil-order')
+    url(r'^deliver/fulfil/(?P<order_id>\d+)/$', deliver.fulfil_order, name='frontend-fulfil-order'),
+    url(r'^deliver/complete$', deliver.completed_order, name='frontend-deliver-complete'),
 
 ]

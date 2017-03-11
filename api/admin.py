@@ -6,7 +6,7 @@ class OrderItemInline(admin.TabularInline):
 
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
-    readonly_fields = ['stage', 'total_price']
+    readonly_fields = ['stage', 'total_price', 'escrow_uuid']
 
 class MenuItemInline(admin.TabularInline):
     model = MenuItem

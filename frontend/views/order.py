@@ -4,6 +4,7 @@ from decimal import Decimal
 
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.shortcuts import render
 
 # Create your views here.
@@ -13,6 +14,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.models import Order, Merchant, MerchantLocation, MenuItem, OrderItem
+from api.tasks import create_escrow
 
 
 def register_init(request):
@@ -21,7 +23,44 @@ def register_init(request):
 
 @login_required
 def index(request):
+    query = request.user.placed_orders.filter(time_fulfilled__isnull=True, timeout_by__gt=datetime.datetime.now())
+    hasorder = query.exists()
+    order = query.first()
     context = {}
+    if hasorder:
+        order_items = OrderItem.objects.filter(order=order)
+        order_items_grouped = {
+
+        }
+        for order_item in order_items:
+            if order_item.menu_item.merchant.name not in order_items_grouped:
+                order_items_grouped[order_item.menu_item.merchant.name] = [order_item]
+            else:
+                order_items_grouped[order_item.menu_item.merchant.name].append(order_item)
+
+        context = {'stage': order.stage, 'hasorder': hasorder, 'order': order,
+                   'order_items_grouped': order_items_grouped}
+    else:
+        query = request.user.fulfilled_orders.filter(time_fulfilled__isnull=True)
+        print(query)
+        hasfulfil = query.exists()
+        order = query.first()
+        if hasfulfil:
+            order_items = OrderItem.objects.filter(order=order)
+            order_items_grouped = {
+
+            }
+            for order_item in order_items:
+                if order_item.menu_item.merchant.name not in order_items_grouped:
+                    order_items_grouped[order_item.menu_item.merchant.name] = [order_item]
+                else:
+                    order_items_grouped[order_item.menu_item.merchant.name].append(order_item)
+
+            context = {'stage': order.stage, 'hasfulfil': hasfulfil, 'order': order,
+                       'order_items_grouped': order_items_grouped}
+
+
+
     return render(request, "index.html", context)
 
 
@@ -126,35 +165,35 @@ def list_merchants_index(request):
 
 
 @login_required
+@api_view(['POST'])
+@transaction.atomic
 def checkout_confirm_order(request):
-    try:
-        payment_method = Order.WALLET
-        if request.POST['payment'] == 'cash':
-            payment_method = Order.CASH
-        order = Order.objects.create(orderer=request.user, location=request.POST['location'],
-                                     payment_method=payment_method,
-                                     timeout_by=timezone.now() + datetime.timedelta(
-                                         minutes=int(request.POST['minutes'])))
+    # try:
+    payment_method = Order.WALLET
+    if request.POST['payment'] == 'cash':
+        payment_method = Order.CASH
 
-        for idx, cart_item in enumerate(request.session['cart']):
-            if cart_item is not None:
-                orderid = cart_item['item_id']
-                menu_item = MenuItem.objects.get(id=orderid)
-                order_item = OrderItem.objects.create(order=order, menu_item=menu_item,
-                                                      quantity=int(cart_item['quantity']), notes=cart_item['notes'])
-        context = {
-            'order': order
-        }
-        print(order)
-        del request.session['cart']
-        del request.session['total']
-        return render(request, "order/placed-success.html", context)
+    order = Order.objects.create(orderer=request.user, location=request.POST['location'],
+                                 payment_method=payment_method,
+                                 timeout_by=timezone.now() + datetime.timedelta(
+                                     minutes=int(request.POST['minutes'])))
 
+    for idx, cart_item in enumerate(request.session['cart']):
+        if cart_item is not None:
+            orderid = cart_item['item_id']
+            menu_item = MenuItem.objects.get(id=orderid)
+            order_item = OrderItem.objects.create(order=order, menu_item=menu_item,
+                                                  quantity=int(cart_item['quantity']), notes=cart_item['notes'])
 
+    print(order)
+    if payment_method == Order.CASH:
+        escrow_uuid = create_escrow(order, request.POST['bb-sso-token'], True)
+    else:
+        escrow_uuid = create_escrow(order, request.POST['bb-sso-token'], False)
+    if escrow_uuid is False:
+        raise RuntimeError('Could not prepare escrow')
 
+    del request.session['cart']
+    del request.session['total']
 
-
-    except Exception as e:
-        print("Error in ordering")
-        print(e)
-        return render(request, "order/placed-error.html")
+    return Response({'success': True, 'timeout_by': order.timeout_by})
