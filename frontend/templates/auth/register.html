@@ -16,8 +16,10 @@
 
 
         <div class="toolbar tabbar">
-            <div class="toolbar-inner"><a id="register-steps-tab-1" class="register-steps-tab no-ripple tab-link">OTP</a><a id="register-steps-tab-2" class="register-steps-tab no-ripple tab-link">Verify</a><a
-                   id="register-steps-tab-3" class="register-steps-tab no-ripple tab-link">Confirm</a></div>
+            <div class="toolbar-inner"><a id="register-steps-tab-1"
+                                          class="register-steps-tab no-ripple tab-link">OTP</a><a
+                    id="register-steps-tab-2" class="register-steps-tab no-ripple tab-link">Verify</a><a
+                    id="register-steps-tab-3" class="register-steps-tab no-ripple tab-link">Confirm</a></div>
 
         </div>
 
@@ -25,15 +27,30 @@
         <div class="page-content login-screen-content">
 
 
-             <div class="tabs-animated-wrap">
-            <div class="tabs">
-                <div id="registration-1" class="active page-content tab">
-                    <div class="content-block">
-                        <div class="login-screen-title">Enter your phone number</div>
-                        <div class="content-block">PDPA todo: (get law students)</div>
+            <div class="tabs-animated-wrap">
+                <div class="tabs">
+                    <div id="registration-1" class="active page-content tab">
+                        <div class="content-block">
+                            <div class="login-screen-title">Enter your phone number</div>
+                            <div class="content-block">
 
-                    </div>
+                                <div class="list-block-label">
+                                    <small>By entering your phone number, you, the User, agree that SMUeats may collect,
+                                        use and disclose your phone number as provided here for the following purposes
+                                        in accordance with the Personal Data Protection Act 2012:<br/>
 
+                                        (a) the verification of your SMUEats account;<br/>
+                                        (b) the sending of notifications via SMS for your orders; <br/>
+                                        (c) the collection of data regarding the usage of the SMUEats application.<br/>
+
+                                        Please contact us at sanzhi.yap.2016@law.smu.edu.sg or
+                                        zxhuang.2016@law.smu.edu.sg if you need further details on the use of your phone
+                                        number, or on the application itself.<br/>
+                                    </small>
+                                </div>
+                            </div>
+
+                        </div>
 
 
                         <div class="list-block">
@@ -53,20 +70,22 @@
                         <div class="list-block">
                             <div id="register-init-button" class="content-block"><a
                                     class="button bg-green color-white">DONE</a></div>
-                            <div class="content-block"><div class="button bg-green color-white please-wait-verify" style="display:none">Please wait.. <span class="color-white preloader"></span><br/></div>
+                            <div class="content-block">
+                                <div class="button bg-green color-white please-wait-verify" style="display:none">Please
+                                    wait.. <span class="color-white preloader"></span><br/></div>
 
-                        </div>
+                            </div>
                         </div>
                         <input type="hidden" name="next" value="{{ next }}"/>
 
-                </div>
-                <div id="registration-2" class="page-content tab">
-                    <div class="content-block">
-                        <div class="login-screen-title">Token</div>
-                        <div class="content-block">Please enter the 5 digit code that's been sent to you via SMS</div>
-
                     </div>
+                    <div id="registration-2" class="page-content tab">
+                        <div class="content-block">
+                            <div class="login-screen-title">Token</div>
+                            <div class="content-block">Please enter the 5 digit code that's been sent to you via SMS
+                            </div>
 
+                        </div>
 
 
                         <div class="list-block">
@@ -90,15 +109,13 @@
                         </div>
                         <input type="hidden" name="next" value="{{ next }}"/>
 
-                </div>
-                <div id="registration-3" class="page-content tab ">
-                    <div class="content-block">
-                        <div class="login-screen-title">Last step..</div>
-                        <div class="content-block">Pick your username and password</div>
-
                     </div>
+                    <div id="registration-3" class="page-content tab ">
+                        <div class="content-block">
+                            <div class="login-screen-title">Last step..</div>
+                            <div class="content-block">Pick your username and password</div>
 
-
+                        </div>
 
 
                         <div class="list-block">
@@ -125,25 +142,27 @@
                         </div>
                         <div class="list-block">
 
-                           <!-- <div class="list-block-label">I agree to the Terms and Conditions</div>-->
+                            <!-- <div class="list-block-label">I agree to the Terms and Conditions</div>-->
                             <div id="register-confirm-button" class="content-block"><a
                                     class="button bg-green color-white">REGISTER</a></div>
-                              <div class="content-block"><div class="button bg-green color-white please-wait-register" style="display:none">Please wait.. <span class="color-white preloader"></span><br/></div>
+                            <div class="content-block">
+                                <div class="button bg-green color-white please-wait-register" style="display:none">
+                                    Please wait.. <span class="color-white preloader"></span><br/></div>
 
-                            <div class="list-block-label">
-                                <small>Consumer advisory - The SMUEats payment service is regarded as a stored value
-                                    facility under Singapore law. BeepBeep, the holder of the BeepBeep stored value
-                                    facility, does not require the approval of the Monetary Authority of Singapore.
-                                    Consumers (Users) are advised to read these terms and conditions carefully
-                                </small>
+                                <div class="list-block-label">
+                                    <small>Consumer advisory - The SMUEats payment service is regarded as a stored value
+                                        facility under Singapore law. BeepBeep, the holder of the BeepBeep stored value
+                                        facility, does not require the approval of the Monetary Authority of Singapore.
+                                        Consumers (Users) are advised to read these terms and conditions carefully
+                                    </small>
+                                </div>
+
                             </div>
-
                         </div>
+                    </div>
                 </div>
             </div>
-             </div>
         </div>
-    </div>
     </div>
 
 

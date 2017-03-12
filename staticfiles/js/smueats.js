@@ -417,7 +417,7 @@ smuEats.onPageInit('*', function (page) {
             },
             success: function (data) {
                 if (data.success == true) {
-                    $(this).hide(); 
+                    $(this).hide();
                     $('.please-wait-register').show();
                     localStorage.setItem("bb-sso-token", data.token);
                     window.location.href = smuEatsAddr + "/sso/"
