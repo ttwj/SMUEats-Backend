@@ -74,7 +74,7 @@ class MenuItem(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField('Image of menu item', null=True, blank=True)
     price = models.DecimalField(**MONEY_PRECISION)
-    remarks = models.CharField(max_length=100)
+    remarks = models.CharField(max_length=100, null=True, blank=True)
     merchant = models.ForeignKey('Merchant',
         on_delete=models.CASCADE, related_name='menu')
     
