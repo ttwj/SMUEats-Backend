@@ -275,7 +275,7 @@ var primary_wallet_balance = 0.00
 
 function getWallet() {
     $.ajax({
-        url: beepbeepAddr + "/v1/account",
+        url: beepbeepAddr + "/v1/account/",
         method: "GET",
         xhrFields: {
             withCredentials: true
