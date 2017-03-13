@@ -150,7 +150,7 @@ def generate_webhook_signature(data):
 
 @task(name="send_sms")
 def send_sms(user_id, message, get_number_user_id):
-    user = User.objects.get(id=user_id).cache()
+    user = User.objects.get(id=user_id)
 
     """sends an email when feedback form is filled successfully"""
 
@@ -160,7 +160,7 @@ def send_sms(user_id, message, get_number_user_id):
             'message': message,
         }
     else:
-        get_number_user = User.objects.get(id=get_number_user_id).cache()
+        get_number_user = User.objects.get(id=get_number_user_id)
         payload = {
             'username': user.username,
             'message': message,
@@ -212,7 +212,7 @@ def task_check_order_status_change():
                     #okay stop keeping track
                     cache.delete('order.' + str(order.id))
 
-                    msg = "SMOOeats: Your order #{0} ($${1}) has expired, since no one agreed to deliver it. Sorry :(".format(
+                    msg = "SMOOeats: Your order #{0} ($${1}) will be expiring soon, since no one agreed to deliver it. Sorry :(".format(
                         order.id, order.total_price)
                     logger.info(msg)
                     send_sms.delay(order.orderer_id, msg, None)
