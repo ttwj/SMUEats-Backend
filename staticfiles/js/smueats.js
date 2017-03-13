@@ -93,6 +93,9 @@ $(document).ready(function () {
                             });
 
                         }
+                        else if (data.success == false) {
+                            smuEats.alert(data.error);
+                        }
                         else {
                             smuEats.alert('An unexpected error occured :(');
                         }

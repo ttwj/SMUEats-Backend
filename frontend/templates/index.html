@@ -4,7 +4,9 @@
     <div data-page="preloader-index" class="page toolbar-fixed">
         <div class="navbar">
             <div class="navbar-inner">
-                <div class="center" style="font-size:15px; font-weight: 400;"><p>Hello, {{ request.user.username }}! Wallet: <span class="checkout-wallet-balance"><i><small>Checking balance..</small></i></span></p>
+                <div class="center" style="font-size:15px; font-weight: 400;">
+                    <p>Hello, {{ request.user.username }}! Wallet: <span class="checkout-wallet-balance"><i><small>Checking balance..</small></i></span>
+                    </p>
                 </div>
 
                 <div class="right"><a href="{% url 'frontend-logout' %}" class="external open-panel link icon-only"><i
@@ -31,10 +33,12 @@
             {% if hasfulfil %}
                 <div class="content-block bg-orange">
                     <br/>
-                    <div class="login-screen-title color-white" style="font-size: 20px;">Completed delivery? Get the 5 digit code from the orderer</div>
-               <br/> <a class="button bg-white color-orange deliver-completed-code"
-                                      style="padding-top: 5px; padding-bottom:40px;">Enter Code</a>
-                <br/>
+                    <div class="login-screen-title color-white" style="font-size: 20px;">Completed delivery? Get the 5
+                        digit code from the orderer
+                    </div>
+                    <br/> <a class="button bg-white color-orange deliver-completed-code"
+                             style="padding-top: 5px; padding-bottom:40px;">Enter Code</a>
+                    <br/>
                 </div>
             {% endif %}
 
@@ -127,11 +131,12 @@
                         {% endfor %}
                     {% endfor %}
 
-                {% if hasorder %}
-                      <div class="content-block"><a class="button bg-red color-white order-cancel-confirm-button"
-                                      style="padding-top: 5px; padding-bottom:40px;">Cancel Order</a></div>
+                    {% if hasorder %}
+                        <div class="content-block"><a class="button bg-red color-white order-cancel-confirm-button"
+                                                      style="padding-top: 5px; padding-bottom:40px;">Cancel Order</a>
+                        </div>
 
-                {% endif %}
+                    {% endif %}
 
 
                 </div>
@@ -143,7 +148,18 @@
                                               href="{% url 'frontend-deliver-index' %}"
                                               class="button button-big button-raised preloader-button">Deliver</a></div>
                 <div class="content-block"><a data-ignore-cache="true" data-force="true"
-                                              class="button button-big button-raised top-up-wallet-button">Top Up Wallet</a></div>
+                                              class="button button-big button-raised top-up-wallet-button">Top Up
+                    Wallet</a></div>
+                {% if request.user|has_group:"SMUEats Staff" %}
+                    <div class="content-block"><a href="http://beta.beepbeep.rocks/admin/" data-ignore-cache="true"
+                                                  data-force="true"
+                                                  class="button button-big button-raised external">Admin Panel
+                        (Wallet)</a></div>
+                    <div class="content-block"><a href="http://smooeats.beepbeep.rocks/admin/" data-ignore-cache="true"
+                                                  data-force="true"
+                                                  class="button button-big button-raised external">Admin Panel
+                        (Orders)</a></div>
+                {% endif %}
                 <!-- <div class="content-block"><a href="pending/pending.html" class="button button-big button-raised">Pending</a></div>-->
             {% endif %}
         </div>
