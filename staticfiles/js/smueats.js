@@ -273,8 +273,8 @@ smuEats.onPageBeforeAnimation('deliver-index', function () {
 
 var primary_wallet_balance = 0.00
 
-function getWallet(){
-     $.ajax({
+function getWallet() {
+    $.ajax({
         url: beepbeepAddr + "/v1/account",
         method: "GET",
         xhrFields: {
@@ -548,6 +548,18 @@ smuEats.onPageInit('*', function (page) {
 
     });
 
+
+    Dom7('.top-up-wallet-button').on('click', function (e) {
+        var qrcode = new QRCode("bb-sso", {
+            text: localStorage.getItem("bb-sso-token"),
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+    });
 
     Dom7('.menu-item-href-checkout').on('click', function (e) {
         var item = $$(this);
