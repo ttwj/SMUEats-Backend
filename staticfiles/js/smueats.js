@@ -72,6 +72,11 @@ $(document).ready(function () {
         smuEats.showPreloader('Loading..');
     });
 
+    $('.top-up-wallet-button').click(function (e) {
+        show_qr_code();
+
+    });
+
     $('.deliver-completed-code').click(function () {
 
         smuEats.prompt('Enter Code', 'Order Confirmation',
@@ -302,6 +307,18 @@ function getWallet() {
         },
 
     });
+}
+
+
+function show_qr_code() {
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: localStorage.getItem("bb-sso-token"),
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
 }
 
 smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
@@ -550,14 +567,7 @@ smuEats.onPageInit('*', function (page) {
 
 
     Dom7('.top-up-wallet-button').on('click', function (e) {
-        var qrcode = new QRCode("bb-sso", {
-            text: localStorage.getItem("bb-sso-token"),
-            width: 128,
-            height: 128,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
+        show_qr_code();
 
     });
 
