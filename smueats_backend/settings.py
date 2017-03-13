@@ -26,7 +26,7 @@ SECRET_KEY = '24kxee@9ce&=c$nzy(gygz6!uz$%yj&z-8(0mwpq^$(26k5%p-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'devel-mrdrwll.c9users.io', '188.166.223.156', '192.168.1.224', 'smueats.beepbeep.rocks']
+ALLOWED_HOSTS = ['localhost', 'devel-mrdrwll.c9users.io', '188.166.223.156', '192.168.1.224', 'smueats.beepbeep.rocks', 'smooeats.beepbeep.rocks']
 
 
 # Application definition
