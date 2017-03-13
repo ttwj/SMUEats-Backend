@@ -59,7 +59,7 @@ def update_escrow_with_token(order):
         'referrer': SMUEats, 'referrer_data': 'json pls'}
 
     '''
-    commission_percentage = Decimal(0.1)  # 10%
+    commission_percentage = Decimal(0.01)  # 10%
     commission = commission_percentage * order.total_price
     amount_received = order.total_price - commission
 
