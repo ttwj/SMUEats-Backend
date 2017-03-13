@@ -191,13 +191,13 @@ def task_check_order_status_change():
     orders_ids = []
     checked_orders =[]
     for order in unfufilled_orders:
-        cached_stage = cache.get('order.' + order.id, False)
+        cached_stage = cache.get('order.' + str(order.id), False)
 
         if cached_stage is False:
             #new entry
             if order.Stage == Order.Stage.PLACED:
                 #new order
-                cache.set('order.' + order.id, order.Stage)
+                cache.set('order.' + str(order.id), order.Stage)
             else:
                 logger.info("Ignoring " + order.id)
         else:
@@ -206,12 +206,12 @@ def task_check_order_status_change():
                 #stage changed
                 if order.stage == Order.Stage.FULFILLED or order.stage == Order.Stage.COMMITTED:
                     #don't keep track anymore
-                    cache.delete('order.' + order.id)
+                    cache.delete('order.' + str(order.id))
                 elif order.stage == Order.Stage.TIMEOUT:
                     #wasn't a timeout just now
                     #order has expired, send SMS
                     #okay stop keeping track
-                    cache.delete('order.' + order.id)
+                    cache.delete('order.' + str(order.id))
                     msg = "SMOOeats: Your order #{0} ($${1}) has expired, since no one agreed to deliver it. Sorry :(".format(
                         order.id, order.total_price)
                     logger.info(msg)
