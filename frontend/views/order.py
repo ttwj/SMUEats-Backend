@@ -197,3 +197,25 @@ def checkout_confirm_order(request):
     del request.session['total']
 
     return Response({'success': True, 'timeout_by': order.timeout_by})
+
+@login_required
+@api_view(['GET'])
+@transaction.atomic
+def checkout_cancel_order(request):
+    query = request.user.placed_orders.filter(time_fulfilled__isnull=True, timeout_by__gt=datetime.datetime.now())
+    hasorder = query.exists()
+    order = query.first()
+    try:
+        if hasorder:
+            if order.Stage == Order.Stage.FULFILLED or order.Stage == Order.Stage.COMMITTED:
+                raise Exception("Error: Someone has already agreed to deliver this order")
+            else:
+                order.delete()
+                return Response({'success': True})
+        else:
+            raise Exception("Error: Could not find order")
+    except Exception as e:
+        return Response({'success': False, 'error': str(e)})
+
+
+

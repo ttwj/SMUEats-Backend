@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^order/del_cart/(?P<cart_id>\d+)/$', order.del_cart),
     url(r'^order/checkout/$', order.checkout_index, name='checkout-index'),
     url(r'^order/checkout/confirm$', order.checkout_confirm_order, name='checkout-confirm-order'),
+    url(r'^order/checkout/cancel', order.checkout_cancel_order, name='checkout-cancel-order'),
 
     url(r'^login/$', auth.views.login, {'template_name': 'auth/login.html', 'authentication_form': LoginForm},
         name='login'),

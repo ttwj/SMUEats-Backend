@@ -49,6 +49,7 @@ def fulfil_order(request, order_id):
     try:
         with transaction.atomic():
             order = Order.objects.get(id=order_id)
+
             #  order.timeout_by.astimezone(timezone('Asia/Singapore')
 
             # create_escrow(order)

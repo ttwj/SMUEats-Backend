@@ -312,14 +312,14 @@ function getWallet() {
 
 function show_qr_code() {
     var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: localStorage.getItem("bb-sso-token"),
-            width: 300,
-            height: 300,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-     smuEats.pickerModal('.picker-modal-qr-code');
+        text: localStorage.getItem("bb-sso-token"),
+        width: 300,
+        height: 300,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
+    smuEats.pickerModal('.picker-modal-qr-code');
 }
 
 smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
@@ -609,6 +609,50 @@ smuEats.onPageInit('*', function (page) {
             });
 
         });
+    });
+
+    $$('.order-cancel-confirm-button').on('click', function () {
+        smuEats.confirm('Are you sure you want to cancel your order!?',
+            function () {
+                $.ajax({
+                    url: smuEatsAddr + "/frontend/order/checkout/cancel",
+                    method: "GET",
+                    success: function (data) {
+                        smuEats.hidePreloader();
+                        if (data.success == true) {
+                            smuEats.alert("Your order has been cancelled :(", function () {
+                                window.location.href = smuEatsAddr;
+                            });
+
+                        }
+                        else {
+                            smuEats.alert('An unexpected error occured :(');
+                        }
+
+                    },
+                    error: function (err) {
+                        smuEats.hidePreloader();
+                        data = err.responseJSON;
+                        console.log("error data" + data);
+
+                        if (data.error != undefined) {
+                            smuEats.alert(data.error);
+                        }
+                        else {
+                            //wtf
+                            smuEats.alert('An unexpected error occured :(');
+                        }
+
+                    }, statusCode: {
+                        500: function () {
+                            smuEats.hidePreloader();
+                            smuEats.alert('An unexpected error occured :(');
+                        }
+                    }
+                });
+
+            }
+        );
     });
 
 

@@ -127,6 +127,12 @@
                         {% endfor %}
                     {% endfor %}
 
+                {% if hasorder %}
+                      <div class="content-block"><a class="button bg-red color-white order-cancel-confirm-button"
+                                      style="padding-top: 5px; padding-bottom:40px;">Cancel Order</a></div>
+
+                {% endif %}
+
 
                 </div>
             {% else %}
