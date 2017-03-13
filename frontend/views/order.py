@@ -170,6 +170,7 @@ def list_merchants_index(request):
 def checkout_confirm_order(request):
     # try:
     payment_method = Order.WALLET
+
     if request.POST['payment'] == 'cash':
         payment_method = Order.CASH
 

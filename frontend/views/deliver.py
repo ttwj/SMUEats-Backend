@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from api.models import MerchantLocation, Merchant, Order, OrderItem
-from api.tasks import send_sms, update_escrow_with_token, perform_escrow
+from api.tasks import send_sms, update_escrow_with_token, perform_escrow, create_escrow
 
 
 @login_required
@@ -50,7 +50,7 @@ def fulfil_order(request, order_id):
             order = Order.objects.get(id=order_id)
             #  order.timeout_by.astimezone(timezone('Asia/Singapore')
 
-            perform_escrow(order)
+            #create_escrow(order)
             order.fulfil_order(request.user)
 
             # generate the escrow (synchronous)
