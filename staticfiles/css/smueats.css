@@ -26,6 +26,10 @@
 
 }
 
+.navbar-fixed .toolbar ~ .page-content {
+    padding-top: 104px !important;
+}
+
 .navbar-hidden {
    display:none;
 }
