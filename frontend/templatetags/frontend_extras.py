@@ -20,3 +20,8 @@ def multiply( value, arg ):
         if arg: return value * arg
     except: pass
     return ''
+
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    group =  Group.objects.get(name=group_name)
+    return group in user.groups.all()
