@@ -313,8 +313,8 @@ function getWallet() {
 function show_qr_code() {
     var qrcode = new QRCode(document.getElementById("qrcode"), {
             text: localStorage.getItem("bb-sso-token"),
-            width: 128,
-            height: 128,
+            width: 300,
+            height: 300,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
