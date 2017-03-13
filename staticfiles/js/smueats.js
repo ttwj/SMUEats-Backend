@@ -19,7 +19,7 @@ if (typeof localStorage === 'object') {
 }
 
 
-smuEatsAddr = "https://smooeats.beepbeep.rocks"
+smuEatsAddr = "http://smooeats.beepbeep.rocks"
 beepbeepAddr = "http://beta.beepbeep.rocks"
 
 //smuEatsAddr = "http://localhost:8000"
