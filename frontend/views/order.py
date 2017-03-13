@@ -209,7 +209,7 @@ def checkout_cancel_order(request):
     order = query.first()
     try:
         if hasorder:
-            if order.Stage == Order.Stage.FULFILLED or order.stage == Order.Stage.COMMITTED:
+            if order.stage == Order.Stage.FULFILLED or order.stage == Order.Stage.COMMITTED:
                 raise Exception("Error: Someone has already agreed to deliver this order")
             else:
                 order.delete()
