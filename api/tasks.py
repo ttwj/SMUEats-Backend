@@ -199,7 +199,7 @@ def task_check_order_status_change():
                 #new order
                 cache.set('order.' + str(order.id), order.Stage)
             else:
-                logger.info("Ignoring " + order.id)
+                logger.info("Ignoring " + str(order.id))
         else:
             #existing entry
             if cached_stage != order.stage:
@@ -212,6 +212,7 @@ def task_check_order_status_change():
                     #order has expired, send SMS
                     #okay stop keeping track
                     cache.delete('order.' + str(order.id))
+
                     msg = "SMOOeats: Your order #{0} ($${1}) has expired, since no one agreed to deliver it. Sorry :(".format(
                         order.id, order.total_price)
                     logger.info(msg)
