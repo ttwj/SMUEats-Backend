@@ -109,7 +109,7 @@ def completed_order(request):
                 if escrow_result is False:
                     raise ValueError('Could not perform escrow')
 
-                msg = "SMOOeats: Your order is completed! You paid $${0} to {1} and have {2} left in your wallet. " \
+                msg = "SMOOeats: Your order is completed! You paid ${0} to {1} and have ${2} left in your wallet. " \
                       "Thanks for using SMOOeats :)".format(
                     order.total_price, order.fulfiller.username, str(new_balance))
                 send_sms.delay(order.orderer_id, msg, None)
@@ -121,7 +121,7 @@ def completed_order(request):
                     send_sms.delay(order.fulfiller_id, msg, None)
                 else:
                     msg = "SMOOeats: Your delivery is completed! You received a wallet transfer from {0} and " \
-                          "have $${1} now!" \
+                          "have ${1} now!" \
                           " Thanks for using SMOOeats :)".format(
                         order.orderer.username, str(fulfiler_balance))
                     send_sms.delay(order.fulfiller_id, msg, None)

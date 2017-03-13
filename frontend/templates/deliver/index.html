@@ -20,7 +20,7 @@
                 <div class="list-block">
 
                     {% for order in orders %}
-                        {% comment %}{% cache 500 order_deliver_card order.id %} {% endcomment %}
+                    {% cache 500 order_deliver_card order.id %}
                         <div class="card">
                             <a href="{% url 'frontend-deliver-details' order_id=order.id %}" style="ripple">
                                 <div style="" valign="bottom" class="card-header">
@@ -41,7 +41,7 @@
                             </a>
                         </div>
                         </div>
-                      {% comment %} {% endcache %} {% endcomment %}
+                      {% endcache %}
                         {% endfor %}
 
                 <div class="page-conntent">
