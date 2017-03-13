@@ -10,6 +10,8 @@ from celery.utils.log import get_task_logger
 from decimal import Decimal
 from django.contrib.auth.models import User
 
+from api.models import Order
+
 logger = get_task_logger(__name__)
 
 BB_SERVER = "http://beta.beepbeep.rocks"
@@ -59,41 +61,52 @@ def update_escrow_with_token(order):
         'referrer': SMUEats, 'referrer_data': 'json pls'}
 
     '''
-    commission_percentage = Decimal(0.01)  # 10%
-    commission = commission_percentage * order.total_price
-    amount_received = order.total_price - commission
-
-    destinations = [
-        {
-            'username': order.fulfiller.username,
-            'amount': str(amount_received)
-        },
-        {
-            'username': 'smueats',
-            'amount': str(commission)
-        }
-    ]
 
     referrer_data = {
         'order_id': order.id
     }
 
-    print({
-        'escrow_uuid': str(order.escrow_uuid),
-        'destinations': destinations,
-        'verify': 'token',
-        'token_user': order.fulfiller.username,
-        'referrer': 'SMUEats',
-        'referrer_data': json.dumps(referrer_data),
-    })
-    r = perform_webhook({
-        'escrow_uuid': str(order.escrow_uuid),
-        'destinations': destinations,
-        'verify': 'token',
-        'token_user': order.fulfiller.username,
-        'referrer': 'SMUEats',
-        'referrer_data': json.dumps(referrer_data),
-    }, BB_SERVER + "/v1/webhooks/update_escrow")
+    if order.payment_method == Order.WALLET:
+        commission_percentage = Decimal('0.01')
+        commission = commission_percentage * order.total_price
+        amount_received = order.total_price - commission
+
+        destinations = [
+            {
+                'username': order.fulfiller.username,
+                'amount': str(amount_received)
+            },
+            {
+                'username': 'smueats',
+                'amount': str(commission)
+            }
+        ]
+
+        print({
+            'escrow_uuid': str(order.escrow_uuid),
+            'destinations': destinations,
+            'verify': 'token',
+            'token_user': order.fulfiller.username,
+            'referrer': 'SMUEats',
+            'referrer_data': json.dumps(referrer_data),
+        })
+        r = perform_webhook({
+            'escrow_uuid': str(order.escrow_uuid),
+            'destinations': destinations,
+            'verify': 'token',
+            'token_user': order.fulfiller.username,
+            'referrer': 'SMUEats',
+            'referrer_data': json.dumps(referrer_data),
+        }, BB_SERVER + "/v1/webhooks/update_escrow")
+    else:
+        r = perform_webhook({
+            'escrow_uuid': str(order.escrow_uuid),
+            'verify': 'token',
+            'token_user': order.fulfiller.username,
+            'referrer': 'SMUEats',
+            'referrer_data': json.dumps(referrer_data),
+        }, BB_SERVER + "/v1/webhooks/update_escrow")
+
 
     jsonResponse = r.json()
     print(jsonResponse)
