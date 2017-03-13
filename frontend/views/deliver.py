@@ -61,7 +61,7 @@ def fulfil_order(request, order_id):
 
             msg = "SMOOeats: You have agreed to fulfil order #{0} ($${1}) to {2} before {3}. Contact {4} @ $NUMBER".format(
                 order_id, order.total_price, order.orderer.username, order.timeout_by, order.orderer.username)
-            send_sms.delay(request.user.id, msg, order.orderer.id)
+            #send_sms.delay(request.user.id, msg, order.orderer.id)
 
             msg = "SMOOeats: {0} has agreed to fulfil your order #{1} ($${2}). " \
                   "Your confirmation token is {3}, ONLY when you have received your order, " \
@@ -69,7 +69,7 @@ def fulfil_order(request, order_id):
                   "Contact {5} @ $NUMBER".format(order.fulfiller.username, order_id, order.total_price, escrow_token,
                                                  order.fulfiller.username, order.fulfiller.username)
 
-            send_sms.delay(order.orderer_id, msg, order.fulfiller_id)
+            #send_sms.delay(order.orderer_id, msg, order.fulfiller_id)
 
             return Response({'success': True})
     except ValueError as e:
@@ -95,11 +95,11 @@ def completed_order(request):
 
                 msg = "SMOOeats: Your order is completed! You paid {0} to {1} and have {2} left in your wallet. Thanks for using SMUEats :)".format(
                     order.total_price, order.fulfiller.username, str(new_balance))
-                send_sms.delay(order.orderer_id, msg, None)
+                #send_sms.delay(order.orderer_id, msg, None)
 
                 msg = "SMOOeats: Your delivery is completed! You received a wallet transfer from {0}. Thanks for using SMUEats :)".format(
                     order.orderer.username)
-                send_sms.delay(order.fulfiller_id, msg, None)
+                #send_sms.delay(order.fulfiller_id, msg, None)
                 return Response({'success': True})
         else:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
