@@ -1,5 +1,6 @@
 from time import timezone, localtime
 
+import math
 import pytz
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -67,8 +68,8 @@ def fulfil_order(request, order_id):
                 order_id, order.total_price, order.orderer.username, str(order.timeout_by.astimezone(Local)),
                 order.orderer.username)
             send_sms.delay(request.user.id, msg, order.orderer.id)
-
-            wait_duration_min = ((order.timeout_by - order.time_committed).total_seconds()) % 60
+            print((order.timeout_by - order.time_committed).total_seconds())
+            wait_duration_min = math.ceil(((order.timeout_by - order.time_committed).total_seconds()) % 60)
             msg = "SMOOeats: {0} ($NUMBER) has accepted your order #{1} ($${2}). " \
                   "Your order should arrive within {3} mins. " \
                   "Your confirmation token is {4}. ONLY show your confirmation token to {5} AFTER you have received your food/drinks from them.".format(
