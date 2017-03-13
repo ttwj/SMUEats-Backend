@@ -319,6 +319,7 @@ function show_qr_code() {
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.H
         });
+     smuEats.pickerModal('.picker-modal-qr-code');
 }
 
 smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
