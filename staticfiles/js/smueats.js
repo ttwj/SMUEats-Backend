@@ -513,7 +513,7 @@ smuEats.onPageInit('*', function (page) {
     Dom7('.menu-item-href-order').on('click', function (e) {
 
 
-        $$('#cart-item-name').html($$(this).attr('item-name'));
+        $$('.cart-item-name').html($$(this).attr('item-name'));
         $$('#cart-item-remarks').html($$(this).attr('item-remarks'));
         $$('#cart-add-item').attr('item-id', $$(this).attr('item-id'));
         smuEats.pickerModal('.picker-modal-store');
