@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+from datetime import datetime, timedelta
 
 import requests
 from celery.schedules import crontab
@@ -9,6 +10,7 @@ from celery.task import task
 from celery.utils.log import get_task_logger
 from decimal import Decimal
 from django.contrib.auth.models import User
+from django.core.cache import cache
 
 from api.models import Order
 
@@ -181,10 +183,42 @@ def send_sms(user_id, message, get_number_user_id):
         logger.info("Sent SMS successfully")
 
 
-@periodic_task(run_every=(crontab(minute='*/2')), name="check_order_status_change", ignore_result=True)
+@periodic_task(run_every=(crontab(minute='*/1')), name="check_order_status_change", ignore_result=True)
 def task_check_order_status_change():
-    """
-    Saves latest image from Flickr
-    """
+    unfufilled_orders = Order.objects.filter(time_fulfilled=None,
+                                             timeout_by__lt=datetime.now() + timedelta(hours=1)) #do not want orders that have expired over 1 hour
+    orders = {}
+    orders_ids = []
+    checked_orders =[]
+    for order in unfufilled_orders:
+        cached_stage = cache.get('order.' + order.id, False)
 
-    logger.info("Checking for shit ")
+        if cached_stage is False:
+            #new entry
+            if order.Stage == Order.Stage.PLACED:
+                #new order
+                cache.set('order.' + order.id, order.Stage)
+            else:
+                logger.info("Ignoring " + order.id)
+        else:
+            #existing entry
+            if cached_stage != order.stage:
+                #stage changed
+                if order.stage == Order.Stage.FULFILLED or order.stage == Order.Stage.COMMITTED:
+                    #don't keep track anymore
+                    cache.delete('order.' + order.id)
+                elif order.stage == Order.Stage.TIMEOUT:
+                    #wasn't a timeout just now
+                    #order has expired, send SMS
+                    #okay stop keeping track
+                    cache.delete('order.' + order.id)
+                    msg = "SMOOeats: Your order #{0} ($${1}) has expired, since no one agreed to deliver it. Sorry :(".format(
+                        order.id, order.total_price)
+                    logger.info(msg)
+                    send_sms.delay(order.orderer_id, msg, None)
+                else:
+                    msg = "SMOOeats: Your order #{0} ($${1}) status has changed".format(
+                        order.id, order.total_price)
+                    #send_sms.delay(order.orderer_id, msg, None)
+                    logger.info(msg)
+                    logger.info("Warning: Unknown order status change")

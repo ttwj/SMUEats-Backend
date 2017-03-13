@@ -140,7 +140,7 @@ class Order(models.Model):
             return self.Stage.FULFILLED
         elif self.time_committed is not None:
             return self.Stage.COMMITTED
-        elif self.timeout_by < timezone.now():
+        elif self.timeout_by + dt.timedelta(min=5) < timezone.now():
             return self.Stage.TIMEOUT
         elif self.is_paid is True:
             return self.Stage.PAID
