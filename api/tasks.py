@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 
 logger = get_task_logger(__name__)
 
-BB_SERVER = "https://beta.beepbeep.rocks"
+BB_SERVER = "http://beta.beepbeep.rocks"
 
 def create_escrow(order, api_auth_token, pay_cash=False):
     if pay_cash:
