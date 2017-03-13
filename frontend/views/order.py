@@ -196,7 +196,7 @@ def checkout_confirm_order(request):
 
     del request.session['cart']
     del request.session['total']
-    cache.set('order.' + str(order.id), order.Stage)
+    cache.set('order.' + str(order.id), order.stage)
 
     return Response({'success': True, 'timeout_by': order.timeout_by})
 
