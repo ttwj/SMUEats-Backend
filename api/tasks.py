@@ -195,11 +195,6 @@ def task_check_order_status_change():
         cached_stage = cache.get('order.' + str(order.id), False)
 
         if cached_stage is False:
-            #new entry
-            if order.Stage == Order.Stage.PLACED:
-                #new order
-                cache.set('order.' + str(order.id), order.Stage)
-            else:
                 logger.info("Ignoring " + str(order.id))
         else:
             #existing entry

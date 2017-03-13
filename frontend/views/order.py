@@ -4,6 +4,7 @@ from decimal import Decimal
 
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.db import transaction
 from django.shortcuts import render
 
@@ -195,6 +196,7 @@ def checkout_confirm_order(request):
 
     del request.session['cart']
     del request.session['total']
+    cache.set('order.' + str(order.id), order.Stage)
 
     return Response({'success': True, 'timeout_by': order.timeout_by})
 
