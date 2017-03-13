@@ -1,5 +1,6 @@
-from time import timezone
+from time import timezone, localtime
 
+import pytz
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import render
@@ -50,7 +51,7 @@ def fulfil_order(request, order_id):
             order = Order.objects.get(id=order_id)
             #  order.timeout_by.astimezone(timezone('Asia/Singapore')
 
-            #create_escrow(order)
+            # create_escrow(order)
             order.fulfil_order(request.user)
 
             # generate the escrow (synchronous)
@@ -59,23 +60,19 @@ def fulfil_order(request, order_id):
             if escrow_token is False:
                 raise ValueError('Could not create escrow')
 
-            wait_duration_min=(order.timeout_by - order.time_committed).minute
-
-
-            wow = "SMOOeats: {0} ({1} has accepted your order #{2} ($${3}). " \
-                  "Your order should arrive within {4} mins. " \
-                  "Your confirmation token is {5}. ONLY show your confirmation token to {6} AFTER you have received your food/drinks from them.".format(
-                order.fulfiller.
-            )
+            print(order.timeout_by)
             msg = "SMOOeats: You have agreed to fulfil order #{0} ($${1}) to {2} before {3}. Contact {4} @ $NUMBER".format(
-                order_id, order.total_price, order.orderer.username, order.timeout_by, order.orderer.username)
+                order_id, order.total_price, order.orderer.username, localtime(order.timeout_by),
+                order.orderer.username)
             send_sms.delay(request.user.id, msg, order.orderer.id)
 
-            msg = "SMOOeats: {0} has agreed to fulfil your order #{1} ($${2}). " \
-                  "Your confirmation token is {3}, ONLY when you have received your order, " \
-                  "do you show the confirmation token to {4}.\r\n" \
-                  "Contact {5} @ $NUMBER".format(order.fulfiller.username, order_id, order.total_price, escrow_token,
-                                                 order.fulfiller.username, order.fulfiller.username)
+            wait_duration_min = (order.timeout_by - order.time_committed).minute
+            msg = "SMOOeats: {0} ($NUMBER) has accepted your order #{1} ($${2}). " \
+                  "Your order should arrive within {3} mins. " \
+                  "Your confirmation token is {4}. ONLY show your confirmation token to {5} AFTER you have received your food/drinks from them.".format(
+                order.fulfiller.username, order.id, order.total_price, wait_duration_min, escrow_token,
+                order.fulfiller.username
+            )
 
             send_sms.delay(order.orderer_id, msg, order.fulfiller_id)
 
@@ -96,22 +93,39 @@ def completed_order(request):
             with transaction.atomic():
 
                 order.close_order()
-                new_balance = perform_escrow(order)
+                escrow_result = perform_escrow(order)
+                new_balance = escrow_result['balance']
 
-                if new_balance is False:
+                fulfiler_balance = None
+
+                if order.fulfiller.username in new_balance['dest_balances']:
+                    fulfiler_balance = new_balance['dest_balances'][order.fulfiller.username]
+
+
+                if escrow_result is False:
                     raise ValueError('Could not perform escrow')
 
-                msg = "SMOOeats: Your order is completed! You paid {0} to {1} and have {2} left in your wallet. Thanks for using SMUEats :)".format(
+                msg = "SMOOeats: Your order is completed! You paid {0} to {1} and have {2} left in your wallet. " \
+                      "Thanks for using SMOOeats :)".format(
                     order.total_price, order.fulfiller.username, str(new_balance))
                 send_sms.delay(order.orderer_id, msg, None)
 
-                msg = "SMOOeats: Your delivery is completed! You received a wallet transfer from {0}. Thanks for using SMUEats :)".format(
-                    order.orderer.username)
-                send_sms.delay(order.fulfiller_id, msg, None)
+                if fulfiler_balance is None:
+                    msg = "SMOOeats: Your delivery is completed! You received a wallet transfer from {0}. Thanks for " \
+                          "using SMOOeats :)".format(
+                        order.orderer.username)
+                    send_sms.delay(order.fulfiller_id, msg, None)
+                else:
+                    msg = "SMOOeats: Your delivery is completed! You received a wallet transfer from {0} and " \
+                          "have {1} now!" \
+                          " Thanks for using SMOOeats :)".format(
+                        order.orderer.username, str(fulfiler_balance))
+                    send_sms.delay(order.fulfiller_id, msg, None)
+
+
                 return Response({'success': True})
         else:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
     except ValueError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-

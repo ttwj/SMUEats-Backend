@@ -51,7 +51,7 @@ def perform_escrow(order):
     if r.status_code != 200 or jsonResponse['success'] != True:
         return False
     else:
-        return jsonResponse['balance']
+        return jsonResponse
 
 
 def update_escrow_with_token(order):

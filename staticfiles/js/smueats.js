@@ -670,7 +670,7 @@ smuEats.onPageInit('*', function (page) {
             success: function (data) {
                 smuEats.hidePreloader();
                 if (data.success == true) {
-                    smuEats.alert("Your order has been placed! A confirmation SMS will be sent to you shortly", function () {
+                    smuEats.alert("Your order has been placed! You may cancel it before someone agrees to deliver it.", function () {
                         window.location.href = smuEatsAddr;
                     });
 
