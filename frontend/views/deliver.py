@@ -4,6 +4,7 @@ import pytz
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.shortcuts import render
+from pytz.reference import Local
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -63,7 +64,7 @@ def fulfil_order(request, order_id):
 
             print(order.timeout_by)
             msg = "SMOOeats: You have agreed to fulfil order #{0} ($${1}) to {2} before {3}. Contact {4} @ $NUMBER".format(
-                order_id, order.total_price, order.orderer.username, localtime(order.timeout_by),
+                order_id, order.total_price, order.orderer.username, str(order.timeout_by.astimezone(Local)),
                 order.orderer.username)
             send_sms.delay(request.user.id, msg, order.orderer.id)
 
