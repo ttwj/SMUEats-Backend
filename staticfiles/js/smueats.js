@@ -684,8 +684,8 @@ smuEats.onPageInit('*', function (page) {
             smuEats.alert('Please enter a valid time!');
             return;
         }
-        else if (time < 30) {
-            smuEats.alert('Min. waiting time is 30 minutes');
+        else if (time < 5) {
+            smuEats.alert('Min. waiting time is 5 minutes');
             return;
         }
 
