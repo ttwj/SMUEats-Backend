@@ -68,7 +68,7 @@ def fulfil_order(request, order_id):
                 order.orderer.username)
             send_sms.delay(request.user.id, msg, order.orderer.id)
 
-            wait_duration_min = (order.timeout_by - order.time_committed).minutes
+            wait_duration_min = ((order.timeout_by - order.time_committed).total_seconds()) % 60
             msg = "SMOOeats: {0} ($NUMBER) has accepted your order #{1} ($${2}). " \
                   "Your order should arrive within {3} mins. " \
                   "Your confirmation token is {4}. ONLY show your confirmation token to {5} AFTER you have received your food/drinks from them.".format(
