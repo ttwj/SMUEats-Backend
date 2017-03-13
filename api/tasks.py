@@ -107,7 +107,6 @@ def update_escrow_with_token(order):
             'referrer_data': json.dumps(referrer_data),
         }, BB_SERVER + "/v1/webhooks/update_escrow")
 
-
     jsonResponse = r.json()
     print(jsonResponse)
     print (r.status_code);
