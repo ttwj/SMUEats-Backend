@@ -16,7 +16,7 @@ if (typeof localStorage === 'object') {
         Storage.prototype._setItem = Storage.prototype.setItem;
         Storage.prototype.setItem = function () {
         };
-        privatebrowsing = true
+        privatebrowsing = true;
         alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
     }
 }
@@ -217,6 +217,7 @@ $.ajaxSetup({
 function performLogin() {
     if (privatebrowsing == true) {
         smuEats.alert('Please exit from private browsing mode or enable HTML5 localStorage in your browser, thanks!');
+        return;
     }
     console.log('hi');
     // $('#login-form').submit();
