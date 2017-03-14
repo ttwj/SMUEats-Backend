@@ -50,10 +50,16 @@ class Merchant(models.Model):
     '''
     
     name = models.CharField(max_length=100)
-    image = models.ImageField('Image of store front', null=True, blank=True)
+    # Caveat: using the primary key of the Merchant is an intuitive approach,
+    # but according to the django docs "in most cases, this object will not have
+    # been saved to the database yet, so if it uses the default AutoField, it
+    # might not yet have a value for its primary key field."
+    image = models.ImageField('Image of store front', null=True, blank=True,
+                              upload_to='merchant/%Y/%m/%d/')
     location = models.ForeignKey('MerchantLocation', on_delete=models.PROTECT)
     location_str = models.CharField('Location (human readable)', max_length=100)
     # menu = 
+    
     
     def __str__(self):
         return self.name
@@ -72,7 +78,8 @@ class MenuItem(models.Model):
     '''
     
     name = models.CharField(max_length=100)
-    image = models.ImageField('Image of menu item', null=True, blank=True)
+    image = models.ImageField('Image of menu item', null=True, blank=True,
+                              upload_to='menu_item/%Y/%m/%d/')
     price = models.DecimalField(**MONEY_PRECISION)
     remarks = models.CharField(max_length=100, null=True, blank=True)
     merchant = models.ForeignKey('Merchant',

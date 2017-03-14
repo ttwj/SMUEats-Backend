@@ -141,7 +141,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"),
 ]
 # Configration for static and media files (Dokku)
-MEDIA_ROOT = 'media/'
+MEDIA_ROOT = '/storage/'
 MEDIA_URL = 'media/'
 
 
