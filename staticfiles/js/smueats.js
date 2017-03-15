@@ -1,5 +1,5 @@
 var smuEats = new Framework7({
-    modalTitle: 'SMOOats',
+    modalTitle: 'SMOOeats',
     // Enable Material theme
     material: true,
     //pushState: true
