@@ -372,7 +372,7 @@ function getWallet(getHistory) {
 
 function getWalletHistory(account_id) {
     $.ajax({
-        url: beepbeepAddr + "/v1/account/" + account_id + "/history",
+        url: beepbeepAddr + "/v1/account/" + account_id + "/history/",
         method: "GET",
         xhrFields: {
             withCredentials: true
