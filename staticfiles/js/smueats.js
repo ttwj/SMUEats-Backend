@@ -65,7 +65,7 @@ function sleep(ms) {
 
 
 $(document).ready(function () {
-    getWallet();
+    getWallet(false);
 
     //for some strange reason Dom7 doesn't want to work here o_O
     $('.login-button').click(function () {
@@ -333,7 +333,7 @@ smuEats.onPageBeforeAnimation('deliver-index', function () {
 
 var primary_wallet_balance = 0.00
 
-function getWallet() {
+function getWallet(getHistory) {
     $.ajax({
         url: beepbeepAddr + "/v1/account/",
         method: "GET",
@@ -350,6 +350,7 @@ function getWallet() {
             if (primary_wallet != undefined) {
                 primary_wallet_balance = primary_wallet.balance;
                 $$('.checkout-wallet-balance').html('$' + primary_wallet.balance)
+                getHistory(primary_wallet.id)
 
             }
 
@@ -408,7 +409,7 @@ function show_qr_code() {
 
 smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
     //obtain wallet balance
-    getWallet();
+    getWallet(false);
 
 
 });
@@ -424,7 +425,7 @@ smuEats.onPageAfterAnimation('wallet', function (page) {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
-    getWalletHistory();
+    getWallet(true);
 
 
 });
