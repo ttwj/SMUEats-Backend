@@ -152,6 +152,9 @@
                                               class="button button-big button-raised top-up-wallet-button">Top Up
                     Wallet</a></div>
                 {% if request.user|has_group:"SMUEats Staff" %}
+                      <div class="content-block"><a data-ignore-cache="true" data-force="true"
+                                              href="{% url 'frontend-wallet-index' %}"
+                                              class="button button-big button-raised">My Wallet</a></div>
                     <div class="content-block"><a href="http://beta.beepbeep.rocks/admin/" data-ignore-cache="true"
                                                   data-force="true"
                                                   class="button button-big button-raised external">Admin Panel

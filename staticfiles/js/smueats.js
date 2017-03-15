@@ -81,7 +81,6 @@ $(document).ready(function () {
     });
 
 
-
     $('.order-cancel-confirm-button').click(function () {
         smuEats.confirm('Are you sure you want to cancel your order!?',
             function () {
@@ -366,6 +365,35 @@ function getWallet() {
 }
 
 
+function getWalletHistory(account_id) {
+    $.ajax({
+        url: beepbeepAddr + "/v1/account/" + account_id + "/history",
+        method: "GET",
+        xhrFields: {
+            withCredentials: true
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Token ' + localStorage.getItem("bb-sso-token"));
+        },
+        success: function (data) {
+            if (data.count < 1) {
+                smuEats.alert('Your wallet history is empty');
+            }
+            for (txn in data) {
+                console.log(txn);
+                $$('#transactions-cards').append('<div class="card"> <a href="#" class="ripple menu-item-href"> ' +
+                    '<div class="card-content"> <div class="card-content-inner"> ' +
+                    '<div class="row"> <div class="col-10">' + txn.amount + '</div><div class="col-10">' + txn.source_name + '</div>' +
+                    '<div class="col-10">' + txn.destination_name + '</div><div class="col-20">' + txn.description + '</div><div class="col-20">' + txn.date_created + '</div>' +
+                    '</div></div></div></a> </div>');
+
+            }
+        },
+
+    });
+
+}
+
 function show_qr_code() {
     var qrcode = new QRCode(document.getElementById("qrcode"), {
         text: localStorage.getItem("bb-sso-token"),
@@ -380,6 +408,22 @@ function show_qr_code() {
 
 smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
     //obtain wallet balance
+    getWallet();
+
+
+});
+
+smuEats.onAfterAnimation('wallet', function (page) {
+    console.log('checking wallet')
+    //obtain wallet balance
+    var qrcode = new QRCode(document.getElementById("qrcode-wallet"), {
+        text: localStorage.getItem("bb-sso-token"),
+        width: 300,
+        height: 300,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+    });
     getWallet();
 
 

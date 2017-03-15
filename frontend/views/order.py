@@ -150,6 +150,13 @@ def checkout_index(request):
         return render(request, "order/checkout-view-cart.html")
 
 
+
+@login_required
+def wallet_index(request):
+
+    return render(request, "wallet/index.html")
+
+
 @login_required
 def list_merchants_index(request):
     locations = MerchantLocation.objects.all()

@@ -2,7 +2,7 @@
 {% load frontend_extras %}
 {% load cache %}
 {% block content %}
-    <div data-page="store" class="page" id="checkout-page">
+    <div data-page="wallet" class="page" id="checkout-page">
         <div class="navbar bg-blue">
             <div class="navbar-inner">
 
@@ -14,8 +14,7 @@
         <div class="toolbar tabbar bg-blue color-white">
             <div class="toolbar-inner">
                 <div class="tab-title" id="checkout-total" order-id="{{ order.id }}" class="checkout-total ripple">
-                    Total:
-                    ${{ order.total_price }}</div>
+                    Total: $wallet_balance</div>
 
             </div>
 
@@ -27,12 +26,12 @@
             <div class="content-block-title">Wallet QR</div>
             <div class="list-block">
 
-                <div id="qrcode"></div>
+                <div id="qrcode-wallet"></div>
             </div>
 
 
             <div class="content-block-title">Transactions</div>
-            <div class="card bg-blue">
+            <div class="card bg-blue" id="transactions-cards">
                 <div class="card-content">
                     <div class="card-content-inner">
                         <div class="row">
@@ -49,26 +48,9 @@
             </div>
 
 
-            {% for transfer in order_items %}
-                <div class="card">
-                    <a href="#" class="ripple menu-item-href">
-                        <div class="card-content">
-                            <div class="card-content-inner">
-                                <div class="row">
 
 
-                                    <div class="col-10">{{ transfer.amount }}</div>
-                                    <div class="col-10">{{ transfer.source_name }}</div>
-                                    <div class="col-10">{{ transfer.destination_name }}</div>
-                                    <div class="col-20">{{ transfer.description }}</div>
-                                </div>
 
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
-            {% endfor %}
 
 
         </div>

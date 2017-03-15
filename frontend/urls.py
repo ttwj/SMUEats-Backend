@@ -25,4 +25,8 @@ urlpatterns = [
     url(r'^deliver/fulfil/(?P<order_id>\d+)/$', deliver.fulfil_order, name='frontend-fulfil-order'),
     url(r'^deliver/complete$', deliver.completed_order, name='frontend-deliver-complete'),
 
+
+    url(r'^wallet/$', order.wallet_index, name='frontend-wallet-index'),
+
+
 ]
