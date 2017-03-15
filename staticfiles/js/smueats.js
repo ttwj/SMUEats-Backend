@@ -384,7 +384,8 @@ function getWalletHistory(account_id) {
             if (data.count < 1) {
                 smuEats.alert('Your wallet history is empty');
             }
-            for (txn in data) {
+            for (i in data) {
+                txn = data[i];
                 console.log(txn);
                 $$('#transactions-cards').append('<div class="card"> <a href="#" class="ripple menu-item-href"> ' +
                     '<div class="card-content"> <div class="card-content-inner"> ' +
