@@ -350,7 +350,11 @@ function getWallet(getHistory) {
             if (primary_wallet != undefined) {
                 primary_wallet_balance = primary_wallet.balance;
                 $$('.checkout-wallet-balance').html('$' + primary_wallet.balance)
-                getHistory(primary_wallet.id)
+                if (getHistory == true) {
+                    getWalletHistory(primary_wallet.id);
+                }
+
+
 
             }
 
