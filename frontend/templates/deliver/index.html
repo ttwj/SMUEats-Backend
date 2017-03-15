@@ -25,7 +25,7 @@
                             <a href="{% url 'frontend-deliver-details' order_id=order.id %}" style="ripple">
                                 <div style="" valign="bottom" class="card-header">
                                     <div class="row" style="width:100%">
-                                        <div class="col-20">${{ order.items|items_total }}</div>
+                                        <div class="col-20">${{ order.total_price }}</div>
                                         <div class="col-30">{{ order.unique_merchants }} store(s)</div>
                                         <div class="col-30">{{ order.items.count }} order(s)</div>
 
