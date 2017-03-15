@@ -413,7 +413,7 @@ smuEats.onPageAfterAnimation('checkout-view-cart', function (page) {
 
 });
 
-smuEats.onAfterAnimation('wallet', function (page) {
+smuEats.onPageAfterAnimation('wallet', function (page) {
     console.log('checking wallet')
     //obtain wallet balance
     var qrcode = new QRCode(document.getElementById("qrcode-wallet"), {
