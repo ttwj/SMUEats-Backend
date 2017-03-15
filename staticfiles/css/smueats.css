@@ -26,6 +26,12 @@
 
 }
 
+#qrcode-wallet img {
+        text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .navbar-fixed .toolbar ~ .page-content {
     padding-top: 104px !important;
 }

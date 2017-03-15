@@ -418,13 +418,13 @@ smuEats.onPageAfterAnimation('wallet', function (page) {
     //obtain wallet balance
     var qrcode = new QRCode(document.getElementById("qrcode-wallet"), {
         text: localStorage.getItem("bb-sso-token"),
-        width: 300,
-        height: 300,
+        width: 250,
+        height: 250,
         colorDark: "#000000",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
-    getWallet();
+    getWalletHistory();
 
 
 });
