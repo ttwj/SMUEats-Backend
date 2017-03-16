@@ -7,7 +7,7 @@
             <div class="navbar-inner">
 
                 <div class="left"><a href="#" class="back link icon-only"><i class="icon icon-back"></i></a></div>
-                <div class="center">Wallet:<span class="checkout-wallet-balance">Updating..</span></div>
+                <div class="center">Wallet: <span class="checkout-wallet-balance">Updating..</span></div>
 
             </div>
         </div>
@@ -30,7 +30,7 @@
             <div class="tabs"></div>
 
 
-            <div id="tab1">
+            <div id="tab1" class="tab active">
                 <div class="content-block-title">Wallet QR</div>
                 <div class="list-block">
 
@@ -38,11 +38,93 @@
                 </div>
             </div>
 
-            <div id="tab2">
+            <div id="tab2" class="tab">
                 <div class="content-block-title">Withdraw</div>
+                <div class="list-block">
+
+                    <form>
+                        {% csrf_token %}
+
+                        <div class="content-block-title">Withdrawal amount</div>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-input item-input-field">
+                                    <input type="number" placeholder="0.00">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-block-title">Select transfer type</div>
+                        <ul>
+
+
+                            <li>
+                                <label class="label-radio item-content">
+                                    <!-- Checked by default -->
+                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
+                                    <div class="item-media">
+                                        <i class="icon icon-form-radio"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title">FAST</small></i></span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="label-radio item-content">
+                                    <!-- Checked by default -->
+                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
+                                    <div class="item-media">
+                                        <i class="icon icon-form-radio"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title">GIRO</small></i></span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+
+                        <div class="content-block-title">Select bank account</div>
+                        <ul>
+
+
+                            <li>
+                                <label class="label-radio item-content">
+                                    <!-- Checked by default -->
+                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
+                                    <div class="item-media">
+                                        <i class="icon icon-form-radio"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title">Account 1</small></i></span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+
+                            <li>
+                                <label class="label-radio item-content">
+                                    <!-- Checked by default -->
+                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
+                                    <div class="item-media">
+                                        <i class="icon icon-form-radio"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <div class="item-title">Account 2</small></i></span>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+
+                    </form>
+                </div>
             </div>
 
-            <div id="tab3">
+            <div id="tab3" class="tab">
                 <div class="content-block-title">Transactions</div>
                 <div class="card bg-blue" id="transactions-cards">
                     <div class="card-content">
