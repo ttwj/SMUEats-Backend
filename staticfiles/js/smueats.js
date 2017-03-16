@@ -909,7 +909,7 @@ smuEats.onPageInit('*', function (page) {
                     smuEats.hidePreloader();
                     if (data.success == true) {
                         smuEats.alert("Your withdrawal is complete", function () {
-                            smuEats.router.refreshPage();
+                            window.location.href = smuEatsAddr;
                         });
 
                     }
