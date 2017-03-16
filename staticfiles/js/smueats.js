@@ -386,7 +386,7 @@ function getBankAccounts() {
             }
             for (i in data) {
                 acc = data[i];
-                console.log(txn);
+                console.log(acc);
                 $$('#bank-accounts-list').append('<li> <label class="label-radio item-content">' +
                     '<input id="wallet-payment-radio" type="radio" name="bank_account" value="' + acc.account_no + '">' +
                     '<div class="item-media"> <i class="icon icon-form-radio"></i> </div><div class="item-inner"> ' +
@@ -878,9 +878,9 @@ smuEats.onPageInit('*', function (page) {
 
     });
     $$('.wallet-perform-withdraw').on('click', function() {
-       var data = $("#checkout-form input").serializeArray();
+       var data = $("#withdraw-form input").serializeArray();
        console.log("withdraw data");
-       console.log(data);s
+       console.log(data);
     });
 
 
