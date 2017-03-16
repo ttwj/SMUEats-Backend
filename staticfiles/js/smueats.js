@@ -331,7 +331,8 @@ smuEats.onPageBeforeAnimation('deliver-index', function () {
     }
 })
 
-var primary_wallet_balance = 0.00
+var primary_wallet_balance = 0.00;
+var primary_wallet;
 
 function getWallet(getHistory) {
     $.ajax({
@@ -883,10 +884,58 @@ smuEats.onPageInit('*', function (page) {
             return;
 
         }
+
         smuEats.confirm('Are you sure you want to perform the withdrawal?', function () {
             var data = $("#withdraw-form input").serializeArray();
             console.log("withdraw data");
+
+            data.push({
+                'name': 'account',
+                'value': primary_wallet.id,
+
+
+            });
             console.log(data);
+            smuEats.showPreloader();
+
+            $.ajax({
+                url: beepbeepAddr + "/v1/transfer/withdraw/",
+                method: "POST",
+                data: $.param(data),
+                success: function (data) {
+                    smuEats.hidePreloader();
+                    if (data.success == true) {
+                        smuEats.alert("Your withdrawal is complete", function () {
+                            smuEats.router.refreshPage();
+                        });
+
+                    }
+                    else {
+                        smuEats.alert('An unexpected error occured :(');
+                    }
+
+                },
+                error: function (err) {
+                    smuEats.hidePreloader();
+                    data = err.responseJSON;
+                    console.log("error data" + data);
+
+                    if (data.error != undefined) {
+                        smuEats.alert(data.error);
+                    }
+                    else {
+                        //wtf
+                        smuEats.alert('An unexpected error occured :(');
+                    }
+
+                }, statusCode: {
+                    500: function () {
+                        smuEats.hidePreloader();
+                        smuEats.alert('An unexpected error occured :(');
+                    }
+                }
+            });
+
 
         });
 
