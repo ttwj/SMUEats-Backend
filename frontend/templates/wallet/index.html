@@ -15,10 +15,10 @@
             <div class="toolbar-inner">
                 <a href="#tab1"
                    class="tab-link active">Top Up</a>
-                <a href="#tab1"
+                <a href="#tab2"
                    class="tab-link">Withdraw</a>
-                <a href="#tab1"
-                   class="tab-link active">History</a>
+                <a href="#tab3"
+                   class="tab-link">History</a>
 
 
             </div>
@@ -27,11 +27,9 @@
         </div>
 
         <div class="page-content">
-            <div class="tabs"></div>
-
-
+            <div class="tabs">
             <div id="tab1" class="tab active">
-                <div class="content-block-title">Wallet QR</div>
+                <div class="login-screen-title">Wallet QR</div>
                 <div class="list-block">
 
                     <div id="qrcode-wallet"></div>
@@ -39,17 +37,17 @@
             </div>
 
             <div id="tab2" class="tab">
-                <div class="content-block-title">Withdraw</div>
+                <div class="content-block-title">Withdraw (UNDER CONSTRUCTION)</div>
                 <div class="list-block">
 
-                    <form>
+                    <form id="withdraw-form">
                         {% csrf_token %}
 
                         <div class="content-block-title">Withdrawal amount</div>
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-input item-input-field">
-                                    <input type="number" placeholder="0.00">
+                                    <input type="number" name="amount" placeholder="0.00">
                                 </div>
                             </div>
                         </div>
@@ -61,7 +59,7 @@
                             <li>
                                 <label class="label-radio item-content">
                                     <!-- Checked by default -->
-                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
+                                    <input id="wallet-payment-radio" type="radio" name="method" value="fast">
                                     <div class="item-media">
                                         <i class="icon icon-form-radio"></i>
                                     </div>
@@ -75,7 +73,7 @@
                             <li>
                                 <label class="label-radio item-content">
                                     <!-- Checked by default -->
-                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
+                                    <input id="wallet-payment-radio" type="radio" name="method" value="giro">
                                     <div class="item-media">
                                         <i class="icon icon-form-radio"></i>
                                     </div>
@@ -88,37 +86,14 @@
                         </ul>
 
                         <div class="content-block-title">Select bank account</div>
-                        <ul>
+                        <ul id="bank-accounts-list">
 
 
-                            <li>
-                                <label class="label-radio item-content">
-                                    <!-- Checked by default -->
-                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
-                                    <div class="item-media">
-                                        <i class="icon icon-form-radio"></i>
-                                    </div>
-                                    <div class="item-inner">
-                                        <div class="item-title">Account 1</small></i></span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </li>
 
-                            <li>
-                                <label class="label-radio item-content">
-                                    <!-- Checked by default -->
-                                    <input id="wallet-payment-radio" type="radio" name="payment" value="wallet">
-                                    <div class="item-media">
-                                        <i class="icon icon-form-radio"></i>
-                                    </div>
-                                    <div class="item-inner">
-                                        <div class="item-title">Account 2</small></i></span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </li>
                         </ul>
+                         <div class="content-block"><a data-ignore-cache="true" data-force="true"
+                                              class="button button-big button-raised wallet-perform-withdraw">Withdraw</a></div>
+
 
                     </form>
                 </div>
@@ -143,7 +118,9 @@
 
                 </div>
 
-            </div>
+            </div></div>
+
+
 
         </div>
     </div>

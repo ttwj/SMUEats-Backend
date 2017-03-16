@@ -351,6 +351,7 @@ function getWallet(getHistory) {
                 primary_wallet_balance = primary_wallet.balance;
                 $$('.checkout-wallet-balance').html('$' + primary_wallet.balance)
                 if (getHistory == true) {
+                    getBankAccounts();
                     getWalletHistory(primary_wallet.id);
                 }
 
@@ -363,6 +364,34 @@ function getWallet(getHistory) {
                 smuEats.alert('An unexpected error occured :(');
                 $('#register-init-button').show();
                 $('.please-wait').hide();
+            }
+        },
+
+    });
+}
+
+function getBankAccounts() {
+    $.ajax({
+        url: beepbeepAddr + "/v1/account/banks/",
+        method: "GET",
+        xhrFields: {
+            withCredentials: true
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Token ' + localStorage.getItem("bb-sso-token"));
+        },
+        success: function (data) {
+            if (data.count < 1) {
+                smuEats.alert('Your wallet history is empty');
+            }
+            for (i in data) {
+                acc = data[i];
+                console.log(txn);
+                $$('#bank-accounts-list').append('<li> <label class="label-radio item-content">' +
+                    '<input id="wallet-payment-radio" type="radio" name="bank_account" value="' + acc.account_no + '">' +
+                    '<div class="item-media"> <i class="icon icon-form-radio"></i> </div><div class="item-inner"> ' +
+                    '<div class="item-title">' + acc.bank_sg + ' - ' + acc.account_no + '</small></i></span> </div></div></label> </li>');
+
             }
         },
 
@@ -847,6 +876,11 @@ smuEats.onPageInit('*', function (page) {
             },
         });
 
+    });
+    $$('.wallet-perform-withdraw').on('click', function() {
+       var data = $("#checkout-form input").serializeArray();
+       console.log("withdraw data");
+       console.log(data);s
     });
 
 
