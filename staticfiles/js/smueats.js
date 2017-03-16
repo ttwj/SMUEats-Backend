@@ -356,7 +356,6 @@ function getWallet(getHistory) {
                 }
 
 
-
             }
 
             else {
@@ -388,7 +387,7 @@ function getBankAccounts() {
                 acc = data[i];
                 console.log(acc);
                 $$('#bank-accounts-list').append('<li> <label class="label-radio item-content">' +
-                    '<input id="wallet-payment-radio" type="radio" name="bank_account" value="' + acc.account_no + '">' +
+                    '<input id="wallet-payment-radio" type="radio" name="bank_account" checked="checked" value="' + acc.account_no + '">' +
                     '<div class="item-media"> <i class="icon icon-form-radio"></i> </div><div class="item-inner"> ' +
                     '<div class="item-title">' + acc.bank_sg + ' - ' + acc.account_no + '</small></i></span> </div></div></label> </li>');
 
@@ -877,10 +876,20 @@ smuEats.onPageInit('*', function (page) {
         });
 
     });
-    $$('.wallet-perform-withdraw').on('click', function() {
-       var data = $("#withdraw-form input").serializeArray();
-       console.log("withdraw data");
-       console.log(data);
+    $$('.wallet-perform-withdraw').on('click', function () {
+        var withdraw_amount = $('#withdraw-amount').val();
+        if (!withdraw_amount || withdraw_amount < 0.01) {
+            smuEats.alert('Please enter a correct withdrawal amount, min. $0.01');
+            return;
+
+        }
+        smuEats.confirm('Are you sure you want to perform the withdrawal?', function () {
+            var data = $("#withdraw-form input").serializeArray();
+            console.log("withdraw data");
+            console.log(data);
+
+        });
+
     });
 
 
