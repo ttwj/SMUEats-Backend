@@ -902,6 +902,9 @@ smuEats.onPageInit('*', function (page) {
                 url: beepbeepAddr + "/v1/transfer/withdraw/",
                 method: "POST",
                 data: $.param(data),
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Token ' + localStorage.getItem("bb-sso-token"));
+                },
                 success: function (data) {
                     smuEats.hidePreloader();
                     if (data.success == true) {
