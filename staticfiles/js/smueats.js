@@ -913,7 +913,11 @@ smuEats.onPageInit('*', function (page) {
                         });
 
                     }
+                   else if (data.error != undefined) {
+                        smuEats.alert(data.error);
+                    }
                     else {
+                        //wtf
                         smuEats.alert('An unexpected error occured :(');
                     }
 
