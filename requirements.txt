@@ -22,7 +22,7 @@ psycopg2==2.6.2
 pyparsing==2.1.10
 pytz==2016.10
 redis==2.10.5
-requests==2.13.0
+requests==2.20.0
 six==1.10.0
 vine==1.1.3
 webservices==0.7
