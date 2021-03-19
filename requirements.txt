@@ -8,7 +8,7 @@ django-adv-cache-tag==1.1.0
 django-cacheops==3.1.2
 django-guardian==1.4.6
 django-redis-cache==1.7.1
-djangorestframework==3.9.1
+djangorestframework==3.11.2
 funcy==1.7.3
 gunicorn==19.6.0
 hiredis==0.2.0
